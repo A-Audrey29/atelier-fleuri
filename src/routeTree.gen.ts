@@ -15,11 +15,17 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProIndexRouteImport } from './routes/pro.index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProProfileRouteImport } from './routes/pro.profile'
 import { Route as ProMissionsRouteImport } from './routes/pro.missions'
 import { Route as ProDisposRouteImport } from './routes/pro.dispos'
 import { Route as AppProvidersRouteImport } from './routes/app.providers'
 import { Route as AppCalendarRouteImport } from './routes/app.calendar'
+import { Route as AdminWorkshopsRouteImport } from './routes/admin.workshops'
+import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
+import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
+import { Route as AdminExportRouteImport } from './routes/admin.export'
+import { Route as AdminCentersRouteImport } from './routes/admin.centers'
 import { Route as AppSessionsNewRouteImport } from './routes/app.sessions.new'
 import { Route as AppSessionsSessionIdRouteImport } from './routes/app.sessions.$sessionId'
 import { Route as AppSessionsSessionIdSeancesNRouteImport } from './routes/app.sessions.$sessionId.seances.$n'
@@ -54,6 +60,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ProProfileRoute = ProProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -79,6 +90,31 @@ const AppCalendarRoute = AppCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminWorkshopsRoute = AdminWorkshopsRouteImport.update({
+  id: '/workshops',
+  path: '/workshops',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProvidersRoute = AdminProvidersRouteImport.update({
+  id: '/providers',
+  path: '/providers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProjectsRoute = AdminProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminExportRoute = AdminExportRouteImport.update({
+  id: '/export',
+  path: '/export',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCentersRoute = AdminCentersRouteImport.update({
+  id: '/centers',
+  path: '/centers',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AppSessionsNewRoute = AppSessionsNewRouteImport.update({
   id: '/sessions/new',
   path: '/sessions/new',
@@ -98,14 +134,20 @@ const AppSessionsSessionIdSeancesNRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/pro': typeof ProRouteWithChildren
+  '/admin/centers': typeof AdminCentersRoute
+  '/admin/export': typeof AdminExportRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
   '/pro/missions': typeof ProMissionsRoute
   '/pro/profile': typeof ProProfileRoute
+  '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/pro/': typeof ProIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
@@ -114,12 +156,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin/centers': typeof AdminCentersRoute
+  '/admin/export': typeof AdminExportRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
   '/pro/missions': typeof ProMissionsRoute
   '/pro/profile': typeof ProProfileRoute
+  '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/pro': typeof ProIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
@@ -129,14 +176,20 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/pro': typeof ProRouteWithChildren
+  '/admin/centers': typeof AdminCentersRoute
+  '/admin/export': typeof AdminExportRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
   '/pro/missions': typeof ProMissionsRoute
   '/pro/profile': typeof ProProfileRoute
+  '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/pro/': typeof ProIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
@@ -150,11 +203,17 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/pro'
+    | '/admin/centers'
+    | '/admin/export'
+    | '/admin/projects'
+    | '/admin/providers'
+    | '/admin/workshops'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
     | '/pro/missions'
     | '/pro/profile'
+    | '/admin/'
     | '/app/'
     | '/pro/'
     | '/app/sessions/$sessionId'
@@ -163,12 +222,17 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
+    | '/admin/centers'
+    | '/admin/export'
+    | '/admin/projects'
+    | '/admin/providers'
+    | '/admin/workshops'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
     | '/pro/missions'
     | '/pro/profile'
+    | '/admin'
     | '/app'
     | '/pro'
     | '/app/sessions/$sessionId'
@@ -180,11 +244,17 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/pro'
+    | '/admin/centers'
+    | '/admin/export'
+    | '/admin/projects'
+    | '/admin/providers'
+    | '/admin/workshops'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
     | '/pro/missions'
     | '/pro/profile'
+    | '/admin/'
     | '/app/'
     | '/pro/'
     | '/app/sessions/$sessionId'
@@ -194,7 +264,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
   ProRoute: typeof ProRouteWithChildren
 }
@@ -243,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/pro/profile': {
       id: '/pro/profile'
       path: '/profile'
@@ -278,6 +355,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCalendarRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin/workshops': {
+      id: '/admin/workshops'
+      path: '/workshops'
+      fullPath: '/admin/workshops'
+      preLoaderRoute: typeof AdminWorkshopsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/providers': {
+      id: '/admin/providers'
+      path: '/providers'
+      fullPath: '/admin/providers'
+      preLoaderRoute: typeof AdminProvidersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/projects': {
+      id: '/admin/projects'
+      path: '/projects'
+      fullPath: '/admin/projects'
+      preLoaderRoute: typeof AdminProjectsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/export': {
+      id: '/admin/export'
+      path: '/export'
+      fullPath: '/admin/export'
+      preLoaderRoute: typeof AdminExportRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/centers': {
+      id: '/admin/centers'
+      path: '/centers'
+      fullPath: '/admin/centers'
+      preLoaderRoute: typeof AdminCentersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/app/sessions/new': {
       id: '/app/sessions/new'
       path: '/sessions/new'
@@ -301,6 +413,26 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminCentersRoute: typeof AdminCentersRoute
+  AdminExportRoute: typeof AdminExportRoute
+  AdminProjectsRoute: typeof AdminProjectsRoute
+  AdminProvidersRoute: typeof AdminProvidersRoute
+  AdminWorkshopsRoute: typeof AdminWorkshopsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCentersRoute: AdminCentersRoute,
+  AdminExportRoute: AdminExportRoute,
+  AdminProjectsRoute: AdminProjectsRoute,
+  AdminProvidersRoute: AdminProvidersRoute,
+  AdminWorkshopsRoute: AdminWorkshopsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AppSessionsSessionIdRouteChildren {
   AppSessionsSessionIdSeancesNRoute: typeof AppSessionsSessionIdSeancesNRoute
@@ -349,7 +481,7 @@ const ProRouteWithChildren = ProRoute._addFileChildren(ProRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRouteWithChildren,
   ProRoute: ProRouteWithChildren,
 }
