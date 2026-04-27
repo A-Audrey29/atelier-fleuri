@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { bookingsForProvider, getCenter } from "@/data/seed";
 import { fmtDayShort, fmtTime, addDaysISO, startOfWeekISO, fmtTimeRange, getDate } from "@/lib/format";
 import { SideDrawer } from "@/components/SideDrawer";
+import { CommentsThread } from "@/components/CommentsThread";
 
 export const Route = createFileRoute("/pro/dispos")({
   component: DisposPage,
