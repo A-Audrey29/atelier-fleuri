@@ -13,6 +13,9 @@ import { Route as ProRouteImport } from './routes/pro'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppSessionsSessionIdRouteImport } from './routes/app.sessions.$sessionId'
+import { Route as AppSessionsSessionIdSeancesNRouteImport } from './routes/app.sessions.$sessionId.seances.$n'
 
 const ProRoute = ProRouteImport.update({
   id: '/pro',
@@ -34,38 +37,83 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSessionsSessionIdRoute = AppSessionsSessionIdRouteImport.update({
+  id: '/sessions/$sessionId',
+  path: '/sessions/$sessionId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSessionsSessionIdSeancesNRoute =
+  AppSessionsSessionIdSeancesNRouteImport.update({
+    id: '/seances/$n',
+    path: '/seances/$n',
+    getParentRoute: () => AppSessionsSessionIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/pro': typeof ProRoute
+  '/app/': typeof AppIndexRoute
+  '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/app': typeof AppRoute
   '/pro': typeof ProRoute
+  '/app': typeof AppIndexRoute
+  '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/pro': typeof ProRoute
+  '/app/': typeof AppIndexRoute
+  '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/app' | '/pro'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/pro'
+    | '/app/'
+    | '/app/sessions/$sessionId'
+    | '/app/sessions/$sessionId/seances/$n'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/app' | '/pro'
-  id: '__root__' | '/' | '/admin' | '/app' | '/pro'
+  to:
+    | '/'
+    | '/admin'
+    | '/pro'
+    | '/app'
+    | '/app/sessions/$sessionId'
+    | '/app/sessions/$sessionId/seances/$n'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/pro'
+    | '/app/'
+    | '/app/sessions/$sessionId'
+    | '/app/sessions/$sessionId/seances/$n'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
-  AppRoute: typeof AppRoute
+  AppRoute: typeof AppRouteWithChildren
   ProRoute: typeof ProRoute
 }
 
@@ -99,13 +147,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/sessions/$sessionId': {
+      id: '/app/sessions/$sessionId'
+      path: '/sessions/$sessionId'
+      fullPath: '/app/sessions/$sessionId'
+      preLoaderRoute: typeof AppSessionsSessionIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/sessions/$sessionId/seances/$n': {
+      id: '/app/sessions/$sessionId/seances/$n'
+      path: '/seances/$n'
+      fullPath: '/app/sessions/$sessionId/seances/$n'
+      preLoaderRoute: typeof AppSessionsSessionIdSeancesNRouteImport
+      parentRoute: typeof AppSessionsSessionIdRoute
+    }
   }
 }
+
+interface AppSessionsSessionIdRouteChildren {
+  AppSessionsSessionIdSeancesNRoute: typeof AppSessionsSessionIdSeancesNRoute
+}
+
+const AppSessionsSessionIdRouteChildren: AppSessionsSessionIdRouteChildren = {
+  AppSessionsSessionIdSeancesNRoute: AppSessionsSessionIdSeancesNRoute,
+}
+
+const AppSessionsSessionIdRouteWithChildren =
+  AppSessionsSessionIdRoute._addFileChildren(AppSessionsSessionIdRouteChildren)
+
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppSessionsSessionIdRoute: typeof AppSessionsSessionIdRouteWithChildren
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppSessionsSessionIdRoute: AppSessionsSessionIdRouteWithChildren,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
-  AppRoute: AppRoute,
+  AppRoute: AppRouteWithChildren,
   ProRoute: ProRoute,
 }
 export const routeTree = rootRouteImport
