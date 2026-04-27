@@ -92,11 +92,11 @@ export function AppShell({ brand, spaceLabel, userName, items, children }: AppSh
 
       {/* Mobile topbar */}
       <header className="fixed inset-x-0 top-0 z-30 flex items-center justify-between border-b border-ink-150 bg-paper/95 backdrop-blur px-4 h-12 md:hidden">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 -mx-1 px-1 py-1 rounded">
           <div className="h-6 w-6 rounded bg-ink-900 text-paper grid place-items-center text-[11px] font-semibold">A</div>
           <span className="text-[14px] font-semibold">{brand}</span>
           <span className="text-[11px] text-ink-400 uppercase tracking-wider ml-1">{spaceLabel}</span>
-        </div>
+        </Link>
         <Avatar name={userName} size={26} />
       </header>
 
