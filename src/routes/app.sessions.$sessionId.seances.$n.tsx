@@ -71,6 +71,14 @@ function SeanceTicket() {
           })}
         </ul>
       </section>
+
+      <div className="mt-6">
+        <CommentsThread
+          seanceId={seance.id}
+          currentRole="referent"
+          currentName={session.referentName}
+        />
+      </div>
     </div>
   );
 }
