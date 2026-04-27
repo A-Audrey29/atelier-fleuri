@@ -5,6 +5,7 @@ import {
 import { fmtSeance } from "@/lib/format";
 import { StatusChip } from "@/components/StatusChip";
 import { Avatar } from "@/components/Avatar";
+import { CommentsThread } from "@/components/CommentsThread";
 
 export const Route = createFileRoute("/app/sessions/$sessionId/seances/$n")({
   component: SeanceTicket,
@@ -70,6 +71,14 @@ function SeanceTicket() {
           })}
         </ul>
       </section>
+
+      <div className="mt-6">
+        <CommentsThread
+          seanceId={seance.id}
+          currentRole="referent"
+          currentName={session.referentName}
+        />
+      </div>
     </div>
   );
 }
