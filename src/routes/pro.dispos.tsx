@@ -206,6 +206,12 @@ function DisposPage() {
                 </div>
               )}
             </Section>
+
+            <CommentsThread
+              seanceId={selectedBooking.seance.id}
+              currentRole="provider"
+              currentName="Marie-Laure Cadet"
+            />
           </div>
         )}
       </SideDrawer>
