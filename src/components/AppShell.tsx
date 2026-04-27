@@ -70,7 +70,16 @@ export function AppShell({ brand, spaceLabel, userName, items, children }: AppSh
             })}
           </ul>
         </nav>
-        <div className="border-t border-ink-150 p-3">
+        <div className="border-t border-ink-150 p-3 space-y-1">
+          <Link
+            to="/"
+            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-[12px] text-ink-500 hover:text-ink-900 hover:bg-ink-50"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5">
+              <path d="M3 12l9-9 9 9M5 10v10h14V10" />
+            </svg>
+            <span>Changer d'espace</span>
+          </Link>
           <div className="flex items-center gap-2.5 px-2 py-1.5">
             <Avatar name={userName} size={28} />
             <div className="flex-1 min-w-0">
