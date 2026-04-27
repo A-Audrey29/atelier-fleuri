@@ -9,7 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ProRouteImport } from './routes/pro'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -30,9 +33,24 @@ import { Route as AppSessionsNewRouteImport } from './routes/app.sessions.new'
 import { Route as AppSessionsSessionIdRouteImport } from './routes/app.sessions.$sessionId'
 import { Route as AppSessionsSessionIdSeancesNRouteImport } from './routes/app.sessions.$sessionId.seances.$n'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProRoute = ProRouteImport.update({
   id: '/pro',
   path: '/pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -136,7 +154,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
   '/pro': typeof ProRouteWithChildren
+  '/signup': typeof SignupRoute
   '/admin/centers': typeof AdminCentersRoute
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -156,6 +177,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/admin/centers': typeof AdminCentersRoute
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -178,7 +202,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
   '/pro': typeof ProRouteWithChildren
+  '/signup': typeof SignupRoute
   '/admin/centers': typeof AdminCentersRoute
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -202,7 +229,10 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/app'
+    | '/forgot-password'
+    | '/login'
     | '/pro'
+    | '/signup'
     | '/admin/centers'
     | '/admin/export'
     | '/admin/projects'
@@ -222,6 +252,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
     | '/admin/centers'
     | '/admin/export'
     | '/admin/projects'
@@ -243,7 +276,10 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/app'
+    | '/forgot-password'
+    | '/login'
     | '/pro'
+    | '/signup'
     | '/admin/centers'
     | '/admin/export'
     | '/admin/projects'
@@ -266,16 +302,40 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
   ProRoute: typeof ProRouteWithChildren
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pro': {
       id: '/pro'
       path: '/pro'
       fullPath: '/pro'
       preLoaderRoute: typeof ProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -483,7 +543,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LoginRoute: LoginRoute,
   ProRoute: ProRouteWithChildren,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
