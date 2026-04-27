@@ -35,24 +35,35 @@ function SessionDetail() {
       <section>
         <h2 className="text-[14px] font-semibold mb-3">Timeline des séances</h2>
         <ol className="space-y-2">
-          {seances.map((se) => (
-            <li key={se.id}>
-              <Link
-                to="/app/sessions/$sessionId/seances/$n"
-                params={{ sessionId, n: String(se.index) }}
-                className="flex items-center gap-3 rounded-lg border border-ink-150 bg-card px-4 py-3 hover:border-ink-300 transition-colors"
-              >
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-ink-50 border border-ink-150 text-[12px] font-semibold text-ink-700">
-                  {se.index}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-[14px] font-medium">Séance {se.index}</div>
-                  <div className="text-[12px] text-ink-500">{fmtSeance(se.start)} · {se.durationMin} min</div>
-                </div>
-                <StatusChip status={seanceStatus(se.id)} />
-              </Link>
-            </li>
-          ))}
+          {seances.map((se) => {
+            const cc = commentCountForSeance(se.id);
+            return (
+              <li key={se.id}>
+                <Link
+                  to="/app/sessions/$sessionId/seances/$n"
+                  params={{ sessionId, n: String(se.index) }}
+                  className="flex items-center gap-3 rounded-lg border border-ink-150 bg-card px-4 py-3 hover:border-ink-300 transition-colors"
+                >
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-ink-50 border border-ink-150 text-[12px] font-semibold text-ink-700">
+                    {se.index}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[14px] font-medium">Séance {se.index}</div>
+                    <div className="text-[12px] text-ink-500">{fmtSeance(se.start)} · {se.durationMin} min</div>
+                  </div>
+                  {cc > 0 && (
+                    <span className="inline-flex items-center gap-1 text-[11px] text-ink-500">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5">
+                        <path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z" />
+                      </svg>
+                      {cc}
+                    </span>
+                  )}
+                  <StatusChip status={seanceStatus(se.id)} />
+                </Link>
+              </li>
+            );
+          })}
         </ol>
       </section>
     </div>
