@@ -5,6 +5,7 @@ import {
 import { fmtSeance } from "@/lib/format";
 import { StatusChip } from "@/components/StatusChip";
 import { Avatar } from "@/components/Avatar";
+import { CommentsThread } from "@/components/CommentsThread";
 
 export const Route = createFileRoute("/app/sessions/$sessionId/seances/$n")({
   component: SeanceTicket,
