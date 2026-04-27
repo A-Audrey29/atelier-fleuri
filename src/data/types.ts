@@ -1,0 +1,85 @@
+// Types métier Asanblé
+
+export type RoleName =
+  | "Psychologue"
+  | "Éducateur"
+  | "Coach sportif"
+  | "Animateur"
+  | "Éducateur sportif"
+  | "Éducateur sportif pleine nature"
+  | "Artiste"
+  | "Enseignant"
+  | "Intervenant numérique";
+
+export type TicketStatus =
+  | "draft"
+  | "pending"
+  | "confirmed"
+  | "refused"
+  | "empty"
+  | "partial"
+  | "blocked"
+  | "done"
+  | "override";
+
+export interface Workshop {
+  id: string;
+  name: string;
+  description?: string;
+  requiredRoles: RoleName[];
+}
+
+export interface Center {
+  id: string;
+  name: string;
+  city: string;
+  address: string;
+  contactName: string;
+  contactPhone: string;
+}
+
+export interface Provider {
+  id: string;
+  fullName: string;
+  roles: RoleName[];
+  city: string;
+  phone?: string;
+  email?: string;
+}
+
+export interface Session {
+  id: string;
+  workshopId: string;
+  centerId: string;
+  groupLabel: string; // "Groupe 1"
+  referentName: string;
+  notes?: string;
+  room?: string;
+  audience?: string;
+}
+
+export interface Seance {
+  id: string;
+  sessionId: string;
+  index: number;       // 1, 2, 3
+  start: string;       // ISO wall-clock GP "2025-05-14T14:00"
+  durationMin: number;
+}
+
+export interface Ticket {
+  id: string;
+  seanceId: string;
+  role: RoleName;
+  providerId: string | null;
+  status: TicketStatus;
+  sentAt?: string;
+  respondedAt?: string;
+}
+
+export interface Availability {
+  providerId: string;
+  // Récurrent: dow 1..7 (lun..dim), slots ["09:00-12:00", "14:00-17:00"]
+  recurring: Array<{ dow: number; ranges: string[] }>;
+  // Exceptions: dates bloquées (YYYY-MM-DD)
+  blockedDates: string[];
+}

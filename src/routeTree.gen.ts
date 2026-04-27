@@ -9,38 +9,349 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ProRouteImport } from './routes/pro'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProIndexRouteImport } from './routes/pro.index'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as ProProfileRouteImport } from './routes/pro.profile'
+import { Route as ProMissionsRouteImport } from './routes/pro.missions'
+import { Route as ProDisposRouteImport } from './routes/pro.dispos'
+import { Route as AppProvidersRouteImport } from './routes/app.providers'
+import { Route as AppCalendarRouteImport } from './routes/app.calendar'
+import { Route as AdminWorkshopsRouteImport } from './routes/admin.workshops'
+import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
+import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
+import { Route as AdminExportRouteImport } from './routes/admin.export'
+import { Route as AdminCentersRouteImport } from './routes/admin.centers'
+import { Route as AppSessionsNewRouteImport } from './routes/app.sessions.new'
+import { Route as AppSessionsSessionIdRouteImport } from './routes/app.sessions.$sessionId'
+import { Route as AppSessionsSessionIdSeancesNRouteImport } from './routes/app.sessions.$sessionId.seances.$n'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProRoute = ProRouteImport.update({
+  id: '/pro',
+  path: '/pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProIndexRoute = ProIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProRoute,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ProProfileRoute = ProProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => ProRoute,
+} as any)
+const ProMissionsRoute = ProMissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => ProRoute,
+} as any)
+const ProDisposRoute = ProDisposRouteImport.update({
+  id: '/dispos',
+  path: '/dispos',
+  getParentRoute: () => ProRoute,
+} as any)
+const AppProvidersRoute = AppProvidersRouteImport.update({
+  id: '/providers',
+  path: '/providers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AdminWorkshopsRoute = AdminWorkshopsRouteImport.update({
+  id: '/workshops',
+  path: '/workshops',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProvidersRoute = AdminProvidersRouteImport.update({
+  id: '/providers',
+  path: '/providers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProjectsRoute = AdminProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminExportRoute = AdminExportRouteImport.update({
+  id: '/export',
+  path: '/export',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCentersRoute = AdminCentersRouteImport.update({
+  id: '/centers',
+  path: '/centers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AppSessionsNewRoute = AppSessionsNewRouteImport.update({
+  id: '/sessions/new',
+  path: '/sessions/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSessionsSessionIdRoute = AppSessionsSessionIdRouteImport.update({
+  id: '/sessions/$sessionId',
+  path: '/sessions/$sessionId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSessionsSessionIdSeancesNRoute =
+  AppSessionsSessionIdSeancesNRouteImport.update({
+    id: '/seances/$n',
+    path: '/seances/$n',
+    getParentRoute: () => AppSessionsSessionIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/pro': typeof ProRouteWithChildren
+  '/signup': typeof SignupRoute
+  '/admin/centers': typeof AdminCentersRoute
+  '/admin/export': typeof AdminExportRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/providers': typeof AppProvidersRoute
+  '/pro/dispos': typeof ProDisposRoute
+  '/pro/missions': typeof ProMissionsRoute
+  '/pro/profile': typeof ProProfileRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/pro/': typeof ProIndexRoute
+  '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/new': typeof AppSessionsNewRoute
+  '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/admin/centers': typeof AdminCentersRoute
+  '/admin/export': typeof AdminExportRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/providers': typeof AppProvidersRoute
+  '/pro/dispos': typeof ProDisposRoute
+  '/pro/missions': typeof ProMissionsRoute
+  '/pro/profile': typeof ProProfileRoute
+  '/admin': typeof AdminIndexRoute
+  '/app': typeof AppIndexRoute
+  '/pro': typeof ProIndexRoute
+  '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/new': typeof AppSessionsNewRoute
+  '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/pro': typeof ProRouteWithChildren
+  '/signup': typeof SignupRoute
+  '/admin/centers': typeof AdminCentersRoute
+  '/admin/export': typeof AdminExportRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/providers': typeof AppProvidersRoute
+  '/pro/dispos': typeof ProDisposRoute
+  '/pro/missions': typeof ProMissionsRoute
+  '/pro/profile': typeof ProProfileRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/pro/': typeof ProIndexRoute
+  '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/new': typeof AppSessionsNewRoute
+  '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/pro'
+    | '/signup'
+    | '/admin/centers'
+    | '/admin/export'
+    | '/admin/projects'
+    | '/admin/providers'
+    | '/admin/workshops'
+    | '/app/calendar'
+    | '/app/providers'
+    | '/pro/dispos'
+    | '/pro/missions'
+    | '/pro/profile'
+    | '/admin/'
+    | '/app/'
+    | '/pro/'
+    | '/app/sessions/$sessionId'
+    | '/app/sessions/new'
+    | '/app/sessions/$sessionId/seances/$n'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/admin/centers'
+    | '/admin/export'
+    | '/admin/projects'
+    | '/admin/providers'
+    | '/admin/workshops'
+    | '/app/calendar'
+    | '/app/providers'
+    | '/pro/dispos'
+    | '/pro/missions'
+    | '/pro/profile'
+    | '/admin'
+    | '/app'
+    | '/pro'
+    | '/app/sessions/$sessionId'
+    | '/app/sessions/new'
+    | '/app/sessions/$sessionId/seances/$n'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/pro'
+    | '/signup'
+    | '/admin/centers'
+    | '/admin/export'
+    | '/admin/projects'
+    | '/admin/providers'
+    | '/admin/workshops'
+    | '/app/calendar'
+    | '/app/providers'
+    | '/pro/dispos'
+    | '/pro/missions'
+    | '/pro/profile'
+    | '/admin/'
+    | '/app/'
+    | '/pro/'
+    | '/app/sessions/$sessionId'
+    | '/app/sessions/new'
+    | '/app/sessions/$sessionId/seances/$n'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
+  ProRoute: typeof ProRouteWithChildren
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pro': {
+      id: '/pro'
+      path: '/pro'
+      fullPath: '/pro'
+      preLoaderRoute: typeof ProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +359,194 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pro/': {
+      id: '/pro/'
+      path: '/'
+      fullPath: '/pro/'
+      preLoaderRoute: typeof ProIndexRouteImport
+      parentRoute: typeof ProRoute
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/pro/profile': {
+      id: '/pro/profile'
+      path: '/profile'
+      fullPath: '/pro/profile'
+      preLoaderRoute: typeof ProProfileRouteImport
+      parentRoute: typeof ProRoute
+    }
+    '/pro/missions': {
+      id: '/pro/missions'
+      path: '/missions'
+      fullPath: '/pro/missions'
+      preLoaderRoute: typeof ProMissionsRouteImport
+      parentRoute: typeof ProRoute
+    }
+    '/pro/dispos': {
+      id: '/pro/dispos'
+      path: '/dispos'
+      fullPath: '/pro/dispos'
+      preLoaderRoute: typeof ProDisposRouteImport
+      parentRoute: typeof ProRoute
+    }
+    '/app/providers': {
+      id: '/app/providers'
+      path: '/providers'
+      fullPath: '/app/providers'
+      preLoaderRoute: typeof AppProvidersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/calendar': {
+      id: '/app/calendar'
+      path: '/calendar'
+      fullPath: '/app/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/admin/workshops': {
+      id: '/admin/workshops'
+      path: '/workshops'
+      fullPath: '/admin/workshops'
+      preLoaderRoute: typeof AdminWorkshopsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/providers': {
+      id: '/admin/providers'
+      path: '/providers'
+      fullPath: '/admin/providers'
+      preLoaderRoute: typeof AdminProvidersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/projects': {
+      id: '/admin/projects'
+      path: '/projects'
+      fullPath: '/admin/projects'
+      preLoaderRoute: typeof AdminProjectsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/export': {
+      id: '/admin/export'
+      path: '/export'
+      fullPath: '/admin/export'
+      preLoaderRoute: typeof AdminExportRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/centers': {
+      id: '/admin/centers'
+      path: '/centers'
+      fullPath: '/admin/centers'
+      preLoaderRoute: typeof AdminCentersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/app/sessions/new': {
+      id: '/app/sessions/new'
+      path: '/sessions/new'
+      fullPath: '/app/sessions/new'
+      preLoaderRoute: typeof AppSessionsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/sessions/$sessionId': {
+      id: '/app/sessions/$sessionId'
+      path: '/sessions/$sessionId'
+      fullPath: '/app/sessions/$sessionId'
+      preLoaderRoute: typeof AppSessionsSessionIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/sessions/$sessionId/seances/$n': {
+      id: '/app/sessions/$sessionId/seances/$n'
+      path: '/seances/$n'
+      fullPath: '/app/sessions/$sessionId/seances/$n'
+      preLoaderRoute: typeof AppSessionsSessionIdSeancesNRouteImport
+      parentRoute: typeof AppSessionsSessionIdRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminCentersRoute: typeof AdminCentersRoute
+  AdminExportRoute: typeof AdminExportRoute
+  AdminProjectsRoute: typeof AdminProjectsRoute
+  AdminProvidersRoute: typeof AdminProvidersRoute
+  AdminWorkshopsRoute: typeof AdminWorkshopsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCentersRoute: AdminCentersRoute,
+  AdminExportRoute: AdminExportRoute,
+  AdminProjectsRoute: AdminProjectsRoute,
+  AdminProvidersRoute: AdminProvidersRoute,
+  AdminWorkshopsRoute: AdminWorkshopsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AppSessionsSessionIdRouteChildren {
+  AppSessionsSessionIdSeancesNRoute: typeof AppSessionsSessionIdSeancesNRoute
+}
+
+const AppSessionsSessionIdRouteChildren: AppSessionsSessionIdRouteChildren = {
+  AppSessionsSessionIdSeancesNRoute: AppSessionsSessionIdSeancesNRoute,
+}
+
+const AppSessionsSessionIdRouteWithChildren =
+  AppSessionsSessionIdRoute._addFileChildren(AppSessionsSessionIdRouteChildren)
+
+interface AppRouteChildren {
+  AppCalendarRoute: typeof AppCalendarRoute
+  AppProvidersRoute: typeof AppProvidersRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppSessionsSessionIdRoute: typeof AppSessionsSessionIdRouteWithChildren
+  AppSessionsNewRoute: typeof AppSessionsNewRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppCalendarRoute: AppCalendarRoute,
+  AppProvidersRoute: AppProvidersRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppSessionsSessionIdRoute: AppSessionsSessionIdRouteWithChildren,
+  AppSessionsNewRoute: AppSessionsNewRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface ProRouteChildren {
+  ProDisposRoute: typeof ProDisposRoute
+  ProMissionsRoute: typeof ProMissionsRoute
+  ProProfileRoute: typeof ProProfileRoute
+  ProIndexRoute: typeof ProIndexRoute
+}
+
+const ProRouteChildren: ProRouteChildren = {
+  ProDisposRoute: ProDisposRoute,
+  ProMissionsRoute: ProMissionsRoute,
+  ProProfileRoute: ProProfileRoute,
+  ProIndexRoute: ProIndexRoute,
+}
+
+const ProRouteWithChildren = ProRoute._addFileChildren(ProRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LoginRoute: LoginRoute,
+  ProRoute: ProRouteWithChildren,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
