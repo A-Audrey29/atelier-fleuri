@@ -14,6 +14,9 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppProvidersRouteImport } from './routes/app.providers'
+import { Route as AppCalendarRouteImport } from './routes/app.calendar'
+import { Route as AppSessionsNewRouteImport } from './routes/app.sessions.new'
 import { Route as AppSessionsSessionIdRouteImport } from './routes/app.sessions.$sessionId'
 import { Route as AppSessionsSessionIdSeancesNRouteImport } from './routes/app.sessions.$sessionId.seances.$n'
 
@@ -42,6 +45,21 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProvidersRoute = AppProvidersRouteImport.update({
+  id: '/providers',
+  path: '/providers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSessionsNewRoute = AppSessionsNewRouteImport.update({
+  id: '/sessions/new',
+  path: '/sessions/new',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSessionsSessionIdRoute = AppSessionsSessionIdRouteImport.update({
   id: '/sessions/$sessionId',
   path: '/sessions/$sessionId',
@@ -59,16 +77,22 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/app': typeof AppRouteWithChildren
   '/pro': typeof ProRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/providers': typeof AppProvidersRoute
   '/app/': typeof AppIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/new': typeof AppSessionsNewRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/pro': typeof ProRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/providers': typeof AppProvidersRoute
   '/app': typeof AppIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/new': typeof AppSessionsNewRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesById {
@@ -77,8 +101,11 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/app': typeof AppRouteWithChildren
   '/pro': typeof ProRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/providers': typeof AppProvidersRoute
   '/app/': typeof AppIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
+  '/app/sessions/new': typeof AppSessionsNewRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRouteTypes {
@@ -88,16 +115,22 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/pro'
+    | '/app/calendar'
+    | '/app/providers'
     | '/app/'
     | '/app/sessions/$sessionId'
+    | '/app/sessions/new'
     | '/app/sessions/$sessionId/seances/$n'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/pro'
+    | '/app/calendar'
+    | '/app/providers'
     | '/app'
     | '/app/sessions/$sessionId'
+    | '/app/sessions/new'
     | '/app/sessions/$sessionId/seances/$n'
   id:
     | '__root__'
@@ -105,8 +138,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/pro'
+    | '/app/calendar'
+    | '/app/providers'
     | '/app/'
     | '/app/sessions/$sessionId'
+    | '/app/sessions/new'
     | '/app/sessions/$sessionId/seances/$n'
   fileRoutesById: FileRoutesById
 }
@@ -154,6 +190,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/providers': {
+      id: '/app/providers'
+      path: '/providers'
+      fullPath: '/app/providers'
+      preLoaderRoute: typeof AppProvidersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/calendar': {
+      id: '/app/calendar'
+      path: '/calendar'
+      fullPath: '/app/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/sessions/new': {
+      id: '/app/sessions/new'
+      path: '/sessions/new'
+      fullPath: '/app/sessions/new'
+      preLoaderRoute: typeof AppSessionsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/sessions/$sessionId': {
       id: '/app/sessions/$sessionId'
       path: '/sessions/$sessionId'
@@ -183,13 +240,19 @@ const AppSessionsSessionIdRouteWithChildren =
   AppSessionsSessionIdRoute._addFileChildren(AppSessionsSessionIdRouteChildren)
 
 interface AppRouteChildren {
+  AppCalendarRoute: typeof AppCalendarRoute
+  AppProvidersRoute: typeof AppProvidersRoute
   AppIndexRoute: typeof AppIndexRoute
   AppSessionsSessionIdRoute: typeof AppSessionsSessionIdRouteWithChildren
+  AppSessionsNewRoute: typeof AppSessionsNewRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCalendarRoute: AppCalendarRoute,
+  AppProvidersRoute: AppProvidersRoute,
   AppIndexRoute: AppIndexRoute,
   AppSessionsSessionIdRoute: AppSessionsSessionIdRouteWithChildren,
+  AppSessionsNewRoute: AppSessionsNewRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
