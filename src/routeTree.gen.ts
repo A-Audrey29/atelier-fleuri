@@ -13,7 +13,11 @@ import { Route as ProRouteImport } from './routes/pro'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProIndexRouteImport } from './routes/pro.index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as ProProfileRouteImport } from './routes/pro.profile'
+import { Route as ProMissionsRouteImport } from './routes/pro.missions'
+import { Route as ProDisposRouteImport } from './routes/pro.dispos'
 import { Route as AppProvidersRouteImport } from './routes/app.providers'
 import { Route as AppCalendarRouteImport } from './routes/app.calendar'
 import { Route as AppSessionsNewRouteImport } from './routes/app.sessions.new'
@@ -40,10 +44,30 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProIndexRoute = ProIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProRoute,
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const ProProfileRoute = ProProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => ProRoute,
+} as any)
+const ProMissionsRoute = ProMissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => ProRoute,
+} as any)
+const ProDisposRoute = ProDisposRouteImport.update({
+  id: '/dispos',
+  path: '/dispos',
+  getParentRoute: () => ProRoute,
 } as any)
 const AppProvidersRoute = AppProvidersRouteImport.update({
   id: '/providers',
@@ -76,10 +100,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/app': typeof AppRouteWithChildren
-  '/pro': typeof ProRoute
+  '/pro': typeof ProRouteWithChildren
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
+  '/pro/dispos': typeof ProDisposRoute
+  '/pro/missions': typeof ProMissionsRoute
+  '/pro/profile': typeof ProProfileRoute
   '/app/': typeof AppIndexRoute
+  '/pro/': typeof ProIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
   '/app/sessions/new': typeof AppSessionsNewRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
@@ -87,10 +115,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/pro': typeof ProRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
+  '/pro/dispos': typeof ProDisposRoute
+  '/pro/missions': typeof ProMissionsRoute
+  '/pro/profile': typeof ProProfileRoute
   '/app': typeof AppIndexRoute
+  '/pro': typeof ProIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
   '/app/sessions/new': typeof AppSessionsNewRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
@@ -100,10 +131,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/app': typeof AppRouteWithChildren
-  '/pro': typeof ProRoute
+  '/pro': typeof ProRouteWithChildren
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
+  '/pro/dispos': typeof ProDisposRoute
+  '/pro/missions': typeof ProMissionsRoute
+  '/pro/profile': typeof ProProfileRoute
   '/app/': typeof AppIndexRoute
+  '/pro/': typeof ProIndexRoute
   '/app/sessions/$sessionId': typeof AppSessionsSessionIdRouteWithChildren
   '/app/sessions/new': typeof AppSessionsNewRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
@@ -117,7 +152,11 @@ export interface FileRouteTypes {
     | '/pro'
     | '/app/calendar'
     | '/app/providers'
+    | '/pro/dispos'
+    | '/pro/missions'
+    | '/pro/profile'
     | '/app/'
+    | '/pro/'
     | '/app/sessions/$sessionId'
     | '/app/sessions/new'
     | '/app/sessions/$sessionId/seances/$n'
@@ -125,10 +164,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
-    | '/pro'
     | '/app/calendar'
     | '/app/providers'
+    | '/pro/dispos'
+    | '/pro/missions'
+    | '/pro/profile'
     | '/app'
+    | '/pro'
     | '/app/sessions/$sessionId'
     | '/app/sessions/new'
     | '/app/sessions/$sessionId/seances/$n'
@@ -140,7 +182,11 @@ export interface FileRouteTypes {
     | '/pro'
     | '/app/calendar'
     | '/app/providers'
+    | '/pro/dispos'
+    | '/pro/missions'
+    | '/pro/profile'
     | '/app/'
+    | '/pro/'
     | '/app/sessions/$sessionId'
     | '/app/sessions/new'
     | '/app/sessions/$sessionId/seances/$n'
@@ -150,7 +196,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   AppRoute: typeof AppRouteWithChildren
-  ProRoute: typeof ProRoute
+  ProRoute: typeof ProRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -183,12 +229,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pro/': {
+      id: '/pro/'
+      path: '/'
+      fullPath: '/pro/'
+      preLoaderRoute: typeof ProIndexRouteImport
+      parentRoute: typeof ProRoute
+    }
     '/app/': {
       id: '/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/pro/profile': {
+      id: '/pro/profile'
+      path: '/profile'
+      fullPath: '/pro/profile'
+      preLoaderRoute: typeof ProProfileRouteImport
+      parentRoute: typeof ProRoute
+    }
+    '/pro/missions': {
+      id: '/pro/missions'
+      path: '/missions'
+      fullPath: '/pro/missions'
+      preLoaderRoute: typeof ProMissionsRouteImport
+      parentRoute: typeof ProRoute
+    }
+    '/pro/dispos': {
+      id: '/pro/dispos'
+      path: '/dispos'
+      fullPath: '/pro/dispos'
+      preLoaderRoute: typeof ProDisposRouteImport
+      parentRoute: typeof ProRoute
     }
     '/app/providers': {
       id: '/app/providers'
@@ -257,11 +331,27 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface ProRouteChildren {
+  ProDisposRoute: typeof ProDisposRoute
+  ProMissionsRoute: typeof ProMissionsRoute
+  ProProfileRoute: typeof ProProfileRoute
+  ProIndexRoute: typeof ProIndexRoute
+}
+
+const ProRouteChildren: ProRouteChildren = {
+  ProDisposRoute: ProDisposRoute,
+  ProMissionsRoute: ProMissionsRoute,
+  ProProfileRoute: ProProfileRoute,
+  ProIndexRoute: ProIndexRoute,
+}
+
+const ProRouteWithChildren = ProRoute._addFileChildren(ProRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   AppRoute: AppRouteWithChildren,
-  ProRoute: ProRoute,
+  ProRoute: ProRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
