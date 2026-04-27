@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { getSession, getWorkshop, getCenter, seancesForSession, seanceStatus } from "@/data/seed";
+import { commentCountForSeance } from "@/data/comments";
 import { fmtSeance } from "@/lib/format";
 import { StatusChip } from "@/components/StatusChip";
 
