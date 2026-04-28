@@ -14,15 +14,24 @@ function NewSeance() {
   const center = centers.find((c) => c.id === user.centerId);
 
   const [workshopId, setWorkshopId] = useState<string>("");
-  const [groupLabel, setGroupLabel] = useState<string>("Groupe 1");
-  const [audience, setAudience] = useState<string>("");
+  const [workshopName, setWorkshopName] = useState<string>("");
+  const [sessionNumber, setSessionNumber] = useState<string>("1");
+  const [seanceNumber, setSeanceNumber] = useState<string>("1");
   const [notes, setNotes] = useState<string>("");
 
   const ws = workshops.find((w) => w.id === workshopId);
 
+  function pickWorkshop(id: string) {
+    setWorkshopId(id);
+    const w = workshops.find((x) => x.id === id);
+    if (w) setWorkshopName(w.name);
+  }
+
+  const fullName = ws ? `${workshopName} — Session ${sessionNumber} · Séance ${seanceNumber}` : "";
+
   function submit() {
     // Mock: création locale → redirige vers le calendrier de dispos pour booker
-    navigate({ to: "/app/availability" });
+    navigate({ to: "/app/availability", search: { workshopId } as never });
   }
 
   return (
@@ -41,7 +50,7 @@ function NewSeance() {
             {workshops.map((w) => (
               <li key={w.id}>
                 <button
-                  onClick={() => setWorkshopId(w.id)}
+                  onClick={() => pickWorkshop(w.id)}
                   className={`w-full text-left p-3 rounded-lg border transition-colors ${
                     workshopId === w.id ? "border-ink-900 bg-ink-50" : "border-ink-150 hover:border-ink-300"
                   }`}
@@ -60,16 +69,26 @@ function NewSeance() {
 
         {ws && (
           <>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <Field label="Nom du groupe">
-                <input value={groupLabel} onChange={(e) => setGroupLabel(e.target.value)}
+            <div className="grid sm:grid-cols-3 gap-4">
+              <Field label="Nom de l'atelier">
+                <input value={workshopName} onChange={(e) => setWorkshopName(e.target.value)}
                   className="w-full h-9 rounded-md border border-ink-200 bg-card px-3 text-[13px] focus:outline-none focus:ring-2 focus:ring-ink-300" />
               </Field>
-              <Field label="Public visé">
-                <input value={audience} onChange={(e) => setAudience(e.target.value)} placeholder="ex. 8 adolescents 13-16 ans"
+              <Field label="Numéro de la session">
+                <input type="number" min={1} value={sessionNumber} onChange={(e) => setSessionNumber(e.target.value)}
+                  className="w-full h-9 rounded-md border border-ink-200 bg-card px-3 text-[13px] focus:outline-none focus:ring-2 focus:ring-ink-300" />
+              </Field>
+              <Field label="Numéro de la séance">
+                <input type="number" min={1} max={ws.seancesCount ?? 99} value={seanceNumber} onChange={(e) => setSeanceNumber(e.target.value)}
                   className="w-full h-9 rounded-md border border-ink-200 bg-card px-3 text-[13px] focus:outline-none focus:ring-2 focus:ring-ink-300" />
               </Field>
             </div>
+
+            <div className="rounded-md bg-accent-soft/50 border border-accent/30 px-4 py-3">
+              <div className="text-[11px] uppercase tracking-wider text-ink-400 mb-1">Nom précis de l'atelier</div>
+              <div className="text-[14px] font-medium text-ink-900">{fullName}</div>
+            </div>
+
             <Field label="Notes pour le prestataire (optionnel)">
               <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
                 className="w-full rounded-md border border-ink-200 bg-card px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-ink-300" />
