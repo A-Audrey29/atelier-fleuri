@@ -55,7 +55,7 @@ function UsersPage() {
           <h1 className="text-[24px] font-semibold tracking-tight">Utilisateurs</h1>
           <p className="text-[13px] text-ink-500 mt-1">{filtered.length} compte{filtered.length > 1 ? "s" : ""}.</p>
         </div>
-        <button className="h-9 px-3 rounded-md bg-ink-900 text-paper text-[13px] font-medium hover:bg-ink-700">+ Inviter</button>
+        <button onClick={() => setOpen(true)} className="h-9 px-3 rounded-md bg-ink-900 text-paper text-[13px] font-medium hover:bg-ink-700">+ Nouvel utilisateur</button>
       </header>
 
       <div className="flex gap-2 mb-4 flex-wrap">
