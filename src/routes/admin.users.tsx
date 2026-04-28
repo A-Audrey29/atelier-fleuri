@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore, accountsStore, centersStore } from "@/data/store";
+import type { UserAccount } from "@/data/types";
 import { Avatar } from "@/components/Avatar";
 
 export const Route = createFileRoute("/admin/users")({
@@ -12,6 +13,27 @@ function UsersPage() {
   const centers = useStore(centersStore);
   const [search, setSearch] = useState("");
   const [role, setRole] = useState<"all" | "referent" | "provider" | "admin">("all");
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState<{ firstName: string; lastName: string; email: string; role: "referent" | "provider" | "admin"; centerId: string }>(
+    { firstName: "", lastName: "", email: "", role: "referent", centerId: "" }
+  );
+
+  function submit() {
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const acc: UserAccount = {
+      id: `u${Date.now()}`,
+      firstName: form.firstName.trim(),
+      lastName: form.lastName.trim(),
+      email: form.email.trim(),
+      role: form.role,
+      centerId: form.role === "referent" ? form.centerId || undefined : undefined,
+      createdAt: today,
+    };
+    accountsStore.update((arr) => [acc, ...arr]);
+    setForm({ firstName: "", lastName: "", email: "", role: "referent", centerId: "" });
+    setOpen(false);
+  }
 
   const filtered = accounts.filter((a) => {
     if (role !== "all" && a.role !== role) return false;
