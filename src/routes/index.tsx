@@ -21,8 +21,7 @@ function Landing() {
           <span className="text-[15px] font-semibold">Asanblé</span>
         </div>
         <nav className="flex items-center gap-2">
-          <Link to="/login" className="text-[13px] text-ink-500 hover:text-ink-900 px-3 py-1.5">Se connecter</Link>
-          <Link to="/signup" className="text-[13px] bg-ink-900 text-paper hover:bg-ink-700 px-3.5 py-2 rounded-md font-medium">Créer un compte</Link>
+          <Link to="/login" className="text-[13px] bg-ink-900 text-paper hover:bg-ink-700 px-3.5 py-2 rounded-md font-medium">Se connecter</Link>
         </nav>
       </header>
 
@@ -37,12 +36,11 @@ function Landing() {
           </h1>
           <p className="text-[16px] text-ink-500 max-w-[560px] mx-auto mt-6 leading-relaxed">
             Asanblé orchestre les sessions d'ateliers multi-séances entre référents famille,
-            prestataires intervenants et équipes coordinatrices. Plus de tableaux Excel,
-            plus de coups de fil perdus.
+            prestataires intervenants et équipes coordinatrices.
           </p>
           <div className="flex justify-center gap-2 mt-8">
-            <Link to="/signup" className="h-11 px-5 rounded-md bg-ink-900 text-paper text-[14px] font-medium hover:bg-ink-700 inline-flex items-center">
-              Créer un compte
+            <Link to="/login" className="h-11 px-5 rounded-md bg-ink-900 text-paper text-[14px] font-medium hover:bg-ink-700 inline-flex items-center">
+              Se connecter
             </Link>
             <Link to="/app" className="h-11 px-5 rounded-md border border-ink-200 text-[14px] font-medium hover:bg-ink-50 inline-flex items-center">
               Voir la démo →
