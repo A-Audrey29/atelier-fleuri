@@ -81,69 +81,71 @@ function MyTickets() {
         {filteredSessions.map(({ session, seances }) => {
           const ws = getWorkshop(session.workshopId);
           const center = getCenter(session.centerId);
+          const isOpen = openSessions[session.id] ?? false;
+          // Compteur statuts pour aperçu replié
+          const statuses = seances.map((se) => seanceStatus(se.id));
+          const nbBlocked = statuses.filter((s) => s === "blocked" || s === "empty").length;
+          const nbConfirmed = statuses.filter((s) => s === "confirmed" || s === "done").length;
           return (
             <article key={session.id} className="rounded-xl border border-ink-150 bg-card overflow-hidden">
-              <header className="flex items-center justify-between gap-3 px-5 py-4 border-b border-ink-150 bg-ink-50/40">
-                <div className="min-w-0">
-                  <Link
-                    to="/app/sessions/$sessionId"
-                    params={{ sessionId: session.id }}
-                    className="text-[15px] font-semibold text-ink-900 hover:text-accent-ink"
-                  >
-                    {ws.name} — {session.groupLabel}
-                  </Link>
+              <button
+                onClick={() => toggle(session.id)}
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 border-b border-ink-150 bg-ink-50/40 hover:bg-ink-50 transition-colors text-left"
+                aria-expanded={isOpen}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="text-[15px] font-semibold text-ink-900">{ws.name} — {session.groupLabel}</div>
                   <div className="text-[12px] text-ink-500 mt-0.5">
-                    {center.name} · {center.city} · {seances.length} séance{seances.length > 1 ? "s" : ""}
+                    {center.name} · {seances.length} séance{seances.length > 1 ? "s" : ""}
+                    <span className="mx-2">·</span>
+                    <span className="text-s-confirmed-ink">{nbConfirmed} confirmée{nbConfirmed > 1 ? "s" : ""}</span>
+                    {nbBlocked > 0 && <><span className="mx-1.5">·</span><span className="text-s-refused-ink">{nbBlocked} à compléter</span></>}
                   </div>
                 </div>
-                <div className="hidden sm:flex items-center gap-1.5 flex-wrap justify-end">
-                  {ws.requiredRoles.map((r) => (
-                    <span key={r} className="text-[11px] text-ink-500 bg-ink-50 border border-ink-150 rounded-full px-2 py-0.5">
-                      {r}
-                    </span>
-                  ))}
-                </div>
-              </header>
+                <span className={`text-ink-400 transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden>▾</span>
+              </button>
 
-              <ul className="divide-y divide-ink-150">
-                {seances.map((se) => {
-                  const status = seanceStatus(se.id);
-                  const tks = ticketsForSeance(se.id);
-                  return (
-                    <li key={se.id} className="px-5 py-4">
-                      <div className="flex items-center justify-between gap-3 mb-3">
-                        <Link
-                          to="/app/sessions/$sessionId/seances/$n"
-                          params={{ sessionId: session.id, n: String(se.index) }}
-                          className="flex items-center gap-3 group min-w-0"
-                        >
-                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-ink-50 border border-ink-150 text-[12px] font-semibold text-ink-700">
-                            {se.index}
-                          </span>
-                          <div className="min-w-0">
-                            <div className="text-[14px] font-medium group-hover:text-accent-ink transition-colors">
-                              Séance {se.index} · <span className="text-ink-500 font-normal">{fmtSeance(se.start)}</span>
+              {isOpen && (
+                <ul className="divide-y divide-ink-150">
+                  {seances.map((se) => {
+                    const status = seanceStatus(se.id);
+                    const tks = ticketsForSeance(se.id);
+                    return (
+                      <li key={se.id} className="px-5 py-4">
+                        <div className="flex items-center justify-between gap-3 mb-3">
+                          <Link
+                            to="/app/sessions/$sessionId/seances/$n"
+                            params={{ sessionId: session.id, n: String(se.index) }}
+                            className="flex items-center gap-3 group min-w-0"
+                          >
+                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-ink-50 border border-ink-150 text-[12px] font-semibold text-ink-700">
+                              {se.index}
+                            </span>
+                            <div className="min-w-0">
+                              <div className="text-[14px] font-medium group-hover:text-accent-ink transition-colors">
+                                Séance {se.index} · <span className="text-ink-500 font-normal">{fmtSeance(se.start)}</span>
+                              </div>
+                              <div className="text-[11px] text-ink-400 mt-0.5">{se.durationMin} min</div>
                             </div>
-                            <div className="text-[11px] text-ink-400 mt-0.5">{se.durationMin} min</div>
-                          </div>
-                        </Link>
-                        <StatusChip status={status} />
-                      </div>
+                          </Link>
+                          <StatusChip status={status} />
+                        </div>
 
-                      <div className="grid gap-2">
-                        {tks.map((t) => (
-                          <RoleSlot
-                            key={t.id}
-                            ticket={t}
-                            seanceId={se.id}
-                            onPick={(role) => setPickerOpen({ role, seanceId: se.id })}
-                          />
-                        ))}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
+                        <div className="grid gap-2">
+                          {tks.map((t) => (
+                            <RoleSlot
+                              key={t.id}
+                              ticket={t}
+                              seanceId={se.id}
+                              onPick={(role) => setPickerOpen({ role, seanceId: se.id })}
+                            />
+                          ))}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </article>
           );
         })}
