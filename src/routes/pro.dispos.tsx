@@ -335,17 +335,30 @@ function DisposPage() {
                   <button onClick={() => setExceptions((arr) => arr.filter((_, i) => i !== idx))}
                     className="h-7 w-7 grid place-items-center text-ink-400 hover:text-ink-900">×</button>
                 </div>
-                {ex.type === "extra" && ex.ranges && ex.ranges.map((r, ri) => (
-                  <div key={ri} className="flex items-center gap-2 pl-2">
-                    <input type="time" value={r.start}
-                      onChange={(e) => setExceptions((arr) => arr.map((x, i) => i === idx ? { ...x, ranges: x.ranges!.map((rg, rgi) => rgi === ri ? { ...rg, start: e.target.value } : rg) } : x))}
-                      className="h-8 w-24 rounded-md border border-ink-200 bg-card px-2 text-[13px]" />
-                    <span className="text-ink-400">→</span>
-                    <input type="time" value={r.end}
-                      onChange={(e) => setExceptions((arr) => arr.map((x, i) => i === idx ? { ...x, ranges: x.ranges!.map((rg, rgi) => rgi === ri ? { ...rg, end: e.target.value } : rg) } : x))}
-                      className="h-8 w-24 rounded-md border border-ink-200 bg-card px-2 text-[13px]" />
+                {ex.type === "extra" && ex.ranges && (
+                  <div className="space-y-1.5 pl-2">
+                    {ex.ranges.map((r, ri) => (
+                      <div key={ri} className="flex items-center gap-2">
+                        <input type="time" value={r.start}
+                          onChange={(e) => setExceptions((arr) => arr.map((x, i) => i === idx ? { ...x, ranges: x.ranges!.map((rg, rgi) => rgi === ri ? { ...rg, start: e.target.value } : rg) } : x))}
+                          className="h-8 w-24 rounded-md border border-ink-200 bg-card px-2 text-[13px]" />
+                        <span className="text-ink-400">→</span>
+                        <input type="time" value={r.end}
+                          onChange={(e) => setExceptions((arr) => arr.map((x, i) => i === idx ? { ...x, ranges: x.ranges!.map((rg, rgi) => rgi === ri ? { ...rg, end: e.target.value } : rg) } : x))}
+                          className="h-8 w-24 rounded-md border border-ink-200 bg-card px-2 text-[13px]" />
+                        <button
+                          onClick={() => setExceptions((arr) => arr.map((x, i) => i === idx ? { ...x, ranges: x.ranges!.filter((_, rgi) => rgi !== ri) } : x))}
+                          className="h-7 w-7 grid place-items-center text-ink-400 hover:text-ink-900"
+                          aria-label="Supprimer"
+                        >×</button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={() => setExceptions((arr) => arr.map((x, i) => i === idx ? { ...x, ranges: [...(x.ranges ?? []), { start: "14:00", end: "17:00" }] } : x))}
+                      className="text-[12px] text-accent-ink hover:underline"
+                    >+ Plage horaire</button>
                   </div>
-                ))}
+                )}
               </div>
             ))}
             {exceptions.length === 0 && (
