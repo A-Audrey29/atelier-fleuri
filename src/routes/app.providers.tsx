@@ -26,11 +26,21 @@ function ProvidersPage() {
     return true;
   });
 
+  const [proposing, setProposing] = useState(false);
+
   return (
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-[1100px] mx-auto">
-      <header className="mb-5">
-        <h1 className="text-[24px] font-semibold tracking-tight">Annuaire prestataires</h1>
-        <p className="text-[13px] text-ink-500 mt-1">{filtered.length} prestataire{filtered.length > 1 ? "s" : ""}.</p>
+      <header className="mb-5 flex items-end justify-between gap-3 flex-wrap">
+        <div>
+          <h1 className="text-[24px] font-semibold tracking-tight">Annuaire prestataires</h1>
+          <p className="text-[13px] text-ink-500 mt-1">{filtered.length} prestataire{filtered.length > 1 ? "s" : ""}.</p>
+        </div>
+        <button
+          onClick={() => setProposing(true)}
+          className="h-9 px-3 rounded-md bg-ink-900 text-paper text-[13px] font-medium hover:bg-ink-700"
+        >
+          + Proposer un prestataire
+        </button>
       </header>
 
       <div className="flex gap-2 mb-4 flex-wrap">
