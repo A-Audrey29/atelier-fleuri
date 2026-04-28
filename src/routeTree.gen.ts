@@ -25,6 +25,7 @@ import { Route as ProMissionsRouteImport } from './routes/pro.missions'
 import { Route as ProDisposRouteImport } from './routes/pro.dispos'
 import { Route as AppProvidersRouteImport } from './routes/app.providers'
 import { Route as AppCalendarRouteImport } from './routes/app.calendar'
+import { Route as AppAvailabilityRouteImport } from './routes/app.availability'
 import { Route as AdminWorkshopsRouteImport } from './routes/admin.workshops'
 import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
@@ -114,6 +115,11 @@ const AppCalendarRoute = AppCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAvailabilityRoute = AppAvailabilityRouteImport.update({
+  id: '/availability',
+  path: '/availability',
+  getParentRoute: () => AppRoute,
+} as any)
 const AdminWorkshopsRoute = AdminWorkshopsRouteImport.update({
   id: '/workshops',
   path: '/workshops',
@@ -170,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
@@ -193,6 +200,7 @@ export interface FileRoutesByTo {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
@@ -220,6 +228,7 @@ export interface FileRoutesById {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
@@ -248,6 +257,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/providers'
     | '/admin/workshops'
+    | '/app/availability'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
@@ -271,6 +281,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/providers'
     | '/admin/workshops'
+    | '/app/availability'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
@@ -297,6 +308,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/providers'
     | '/admin/workshops'
+    | '/app/availability'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
@@ -435,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCalendarRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/availability': {
+      id: '/app/availability'
+      path: '/availability'
+      fullPath: '/app/availability'
+      preLoaderRoute: typeof AppAvailabilityRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/admin/workshops': {
       id: '/admin/workshops'
       path: '/workshops'
@@ -526,6 +545,7 @@ const AppSessionsSessionIdRouteWithChildren =
   AppSessionsSessionIdRoute._addFileChildren(AppSessionsSessionIdRouteChildren)
 
 interface AppRouteChildren {
+  AppAvailabilityRoute: typeof AppAvailabilityRoute
   AppCalendarRoute: typeof AppCalendarRoute
   AppProvidersRoute: typeof AppProvidersRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -534,6 +554,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAvailabilityRoute: AppAvailabilityRoute,
   AppCalendarRoute: AppCalendarRoute,
   AppProvidersRoute: AppProvidersRoute,
   AppIndexRoute: AppIndexRoute,
