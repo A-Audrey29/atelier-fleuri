@@ -27,6 +27,7 @@ import { Route as AppProvidersRouteImport } from './routes/app.providers'
 import { Route as AppCalendarRouteImport } from './routes/app.calendar'
 import { Route as AppAvailabilityRouteImport } from './routes/app.availability'
 import { Route as AdminWorkshopsRouteImport } from './routes/admin.workshops'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminExportRouteImport } from './routes/admin.export'
@@ -125,6 +126,11 @@ const AdminWorkshopsRoute = AdminWorkshopsRouteImport.update({
   path: '/workshops',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProvidersRoute = AdminProvidersRouteImport.update({
   id: '/providers',
   path: '/providers',
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
@@ -227,6 +235,7 @@ export interface FileRoutesById {
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
@@ -256,6 +265,7 @@ export interface FileRouteTypes {
     | '/admin/export'
     | '/admin/projects'
     | '/admin/providers'
+    | '/admin/users'
     | '/admin/workshops'
     | '/app/availability'
     | '/app/calendar'
@@ -280,6 +290,7 @@ export interface FileRouteTypes {
     | '/admin/export'
     | '/admin/projects'
     | '/admin/providers'
+    | '/admin/users'
     | '/admin/workshops'
     | '/app/availability'
     | '/app/calendar'
@@ -307,6 +318,7 @@ export interface FileRouteTypes {
     | '/admin/export'
     | '/admin/projects'
     | '/admin/providers'
+    | '/admin/users'
     | '/admin/workshops'
     | '/app/availability'
     | '/app/calendar'
@@ -461,6 +473,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWorkshopsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/providers': {
       id: '/admin/providers'
       path: '/providers'
@@ -518,6 +537,7 @@ interface AdminRouteChildren {
   AdminExportRoute: typeof AdminExportRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminProvidersRoute: typeof AdminProvidersRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminWorkshopsRoute: typeof AdminWorkshopsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -527,6 +547,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminExportRoute: AdminExportRoute,
   AdminProjectsRoute: AdminProjectsRoute,
   AdminProvidersRoute: AdminProvidersRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminWorkshopsRoute: AdminWorkshopsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
