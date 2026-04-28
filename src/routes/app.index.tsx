@@ -17,6 +17,7 @@ export const Route = createFileRoute("/app/")({
 function MyTickets() {
   const [tab, setTab] = useState<"current" | "history">("current");
   const [pickerOpen, setPickerOpen] = useState<{ role: RoleName; seanceId: string } | null>(null);
+  const [openSessions, setOpenSessions] = useState<Record<string, boolean>>({});
 
   const now = new Date();
   function isFuture(seanceStart: string) {
@@ -36,18 +37,22 @@ function MyTickets() {
     })
     .filter((x) => x.seances.length > 0);
 
+  function toggle(id: string) {
+    setOpenSessions((s) => ({ ...s, [id]: !s[id] }));
+  }
+
   return (
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-[1100px] mx-auto">
       <header className="flex items-end justify-between gap-4 mb-6">
         <div>
           <h1 className="text-[24px] font-semibold tracking-tight">Mes tickets</h1>
-          <p className="text-[13px] text-ink-500 mt-1">Vos sessions d'atelier et l'avancement des prestataires.</p>
+          <p className="text-[13px] text-ink-500 mt-1">Vos séances d'atelier et l'avancement des prestataires.</p>
         </div>
         <Link
           to="/app/sessions/new"
           className="inline-flex items-center gap-1.5 rounded-md bg-ink-900 text-paper px-3.5 py-2 text-[13px] font-medium hover:bg-ink-700 transition-colors"
         >
-          <span>+</span> Nouvelle session
+          <span>+</span> Nouvelle séance
         </Link>
       </header>
 
@@ -61,7 +66,7 @@ function MyTickets() {
               tab === t ? "text-ink-900" : "text-ink-400 hover:text-ink-700",
             ].join(" ")}
           >
-            {t === "current" ? "En cours" : "Historique"}
+            {t === "current" ? "En cours" : "Passé"}
             {tab === t && <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-ink-900" />}
           </button>
         ))}
