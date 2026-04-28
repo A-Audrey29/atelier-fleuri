@@ -110,6 +110,42 @@ function ProvidersPage() {
           </div>
         )}
       </SideDrawer>
+
+      <SideDrawer
+        open={proposing}
+        onClose={() => setProposing(false)}
+        subtitle="Suggestion à l'admin"
+        title="Proposer un prestataire"
+        footer={
+          <button
+            onClick={() => setProposing(false)}
+            className="w-full h-9 rounded-md bg-ink-900 text-paper text-[13px] font-medium hover:bg-ink-700"
+          >
+            Envoyer la proposition
+          </button>
+        }
+      >
+        <form className="space-y-3 text-[13px]" onSubmit={(e) => { e.preventDefault(); setProposing(false); }}>
+          <p className="text-[12px] text-ink-500">
+            Vous connaissez un intervenant qui pourrait rejoindre le réseau ? L'équipe Asanblé prendra contact pour validation.
+          </p>
+          <FieldRow label="Nom complet"><input required className="input" /></FieldRow>
+          <FieldRow label="Rôle / spécialité"><input required placeholder="ex. Psychologue" className="input" /></FieldRow>
+          <FieldRow label="Téléphone"><input className="input" placeholder="0690 …" /></FieldRow>
+          <FieldRow label="Email"><input type="email" className="input" /></FieldRow>
+          <FieldRow label="Note"><textarea rows={3} className="input" placeholder="Pourquoi le recommandez-vous ?" /></FieldRow>
+        </form>
+        <style>{`.input { width: 100%; min-height: 36px; border: 1px solid var(--ink-200); background: var(--card); border-radius: 6px; padding: 6px 12px; font-size: 13px; outline: none; }`}</style>
+      </SideDrawer>
     </div>
+  );
+}
+
+function FieldRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="block text-[11px] uppercase tracking-wider text-ink-400 mb-1">{label}</span>
+      {children}
+    </label>
   );
 }
