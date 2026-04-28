@@ -3,21 +3,21 @@ import type {
 } from "./types";
 
 export const workshops: Workshop[] = [
-  { id: "w1", name: "Gestion des émotions", requiredRoles: ["Psychologue", "Éducateur", "Coach sportif"] },
-  { id: "w2", name: "Communication parents-enfants", requiredRoles: ["Animateur"] },
-  { id: "w3", name: "Soutien émotionnel scolaire", requiredRoles: ["Animateur", "Psychologue"] },
-  { id: "w4", name: "Pratique d'activité physique", requiredRoles: ["Éducateur sportif pleine nature"] },
-  { id: "w5", name: "Découverte Sport/Étude", requiredRoles: ["Animateur", "Éducateur sportif"] },
-  { id: "w6", name: "Parole des aînés", requiredRoles: ["Animateur", "Éducateur"] },
+  { id: "w1", name: "Gestion des émotions", requiredRoles: ["Psychologue", "Éducateur", "Coach sportif"], seancesCount: 4, durationMin: 120 },
+  { id: "w2", name: "Communication parents-enfants", requiredRoles: ["Animateur"], seancesCount: 2, durationMin: 120 },
+  { id: "w3", name: "Soutien émotionnel scolaire", requiredRoles: ["Animateur", "Psychologue"], seancesCount: 3, durationMin: 90 },
+  { id: "w4", name: "Pratique d'activité physique", requiredRoles: ["Éducateur sportif pleine nature"], seancesCount: 6, durationMin: 90 },
+  { id: "w5", name: "Découverte Sport/Étude", requiredRoles: ["Animateur", "Éducateur sportif"], seancesCount: 2, durationMin: 90 },
+  { id: "w6", name: "Parole des aînés", requiredRoles: ["Animateur", "Éducateur"], seancesCount: 4, durationMin: 90 },
 ];
 
 export const centers: Center[] = [
-  { id: "c1", name: "Centre social des Abymes", city: "Abymes", address: "12 rue Schœlcher, 97139 Les Abymes", contactName: "Mathilde Marival", contactPhone: "0690 12 34 56" },
-  { id: "c2", name: "Centre social de Baie-Mahault", city: "Baie-Mahault", address: "5 av. de la Libération, 97122 Baie-Mahault", contactName: "Karine Lubin", contactPhone: "0690 22 11 88" },
-  { id: "c3", name: "Centre social de Pointe-à-Pitre", city: "Pointe-à-Pitre", address: "8 rue Frébault, 97110 Pointe-à-Pitre", contactName: "Stéphane Maillot", contactPhone: "0690 33 44 12" },
-  { id: "c4", name: "Centre social de Sainte-Anne", city: "Sainte-Anne", address: "Place de la Mairie, 97180 Sainte-Anne", contactName: "Lydia Bernus", contactPhone: "0690 55 66 21" },
-  { id: "c5", name: "Centre social du Gosier", city: "Le Gosier", address: "Bd Amédée Clara, 97190 Le Gosier", contactName: "Yann Pétro", contactPhone: "0690 77 88 33" },
-  { id: "c6", name: "Centre social de Capesterre", city: "Capesterre-Belle-Eau", address: "1 rue de la Cascade, 97130 Capesterre-Belle-Eau", contactName: "Nathalie Sully", contactPhone: "0690 99 12 45" },
+  { id: "c1", name: "Centre social des Abymes", city: "Abymes", address: "12 rue Schœlcher, 97139 Les Abymes", contactName: "Mathilde Marival", contactPhone: "0690 12 34 56", contactEmail: "contact@cs-abymes.gp" },
+  { id: "c2", name: "Centre social de Baie-Mahault", city: "Baie-Mahault", address: "5 av. de la Libération, 97122 Baie-Mahault", contactName: "Karine Lubin", contactPhone: "0690 22 11 88", contactEmail: "contact@cs-bm.gp" },
+  { id: "c3", name: "Centre social de Pointe-à-Pitre", city: "Pointe-à-Pitre", address: "8 rue Frébault, 97110 Pointe-à-Pitre", contactName: "Stéphane Maillot", contactPhone: "0690 33 44 12", contactEmail: "contact@cs-pap.gp" },
+  { id: "c4", name: "Centre social de Sainte-Anne", city: "Sainte-Anne", address: "Place de la Mairie, 97180 Sainte-Anne", contactName: "Lydia Bernus", contactPhone: "0690 55 66 21", contactEmail: "contact@cs-stanne.gp" },
+  { id: "c5", name: "Centre social du Gosier", city: "Le Gosier", address: "Bd Amédée Clara, 97190 Le Gosier", contactName: "Yann Pétro", contactPhone: "0690 77 88 33", contactEmail: "contact@cs-gosier.gp" },
+  { id: "c6", name: "Centre social de Capesterre", city: "Capesterre-Belle-Eau", address: "1 rue de la Cascade, 97130 Capesterre-Belle-Eau", contactName: "Nathalie Sully", contactPhone: "0690 99 12 45", contactEmail: "contact@cs-capesterre.gp" },
 ];
 
 export const providers: Provider[] = [

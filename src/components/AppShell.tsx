@@ -80,13 +80,16 @@ export function AppShell({ brand, spaceLabel, userName, items, children }: AppSh
             </svg>
             <span>Changer d'espace</span>
           </Link>
-          <div className="flex items-center gap-2.5 px-2 py-1.5">
+          <Link
+            to="/account"
+            className="w-full flex items-center gap-2.5 rounded-md px-2 py-1.5 hover:bg-ink-50 transition-colors text-left"
+          >
             <Avatar name={userName} size={28} />
             <div className="flex-1 min-w-0">
               <div className="text-[13px] font-medium truncate">{userName}</div>
-              <div className="text-[11px] text-ink-400 truncate">{spaceLabel}</div>
+              <div className="text-[11px] text-ink-400 truncate">Mon compte</div>
             </div>
-          </div>
+          </Link>
         </div>
       </aside>
 
@@ -97,7 +100,9 @@ export function AppShell({ brand, spaceLabel, userName, items, children }: AppSh
           <span className="text-[14px] font-semibold">{brand}</span>
           <span className="text-[11px] text-ink-400 uppercase tracking-wider ml-1">{spaceLabel}</span>
         </Link>
-        <Avatar name={userName} size={26} />
+        <Link to="/account" aria-label="Mon compte">
+          <Avatar name={userName} size={26} />
+        </Link>
       </header>
 
       {/* Mobile tabbar */}

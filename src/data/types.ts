@@ -27,6 +27,8 @@ export interface Workshop {
   name: string;
   description?: string;
   requiredRoles: RoleName[];
+  seancesCount?: number;
+  durationMin?: number;
 }
 
 export interface Center {
@@ -36,6 +38,18 @@ export interface Center {
   address: string;
   contactName: string;
   contactPhone: string;
+  contactEmail?: string;
+}
+
+export interface UserAccount {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: "referent" | "provider" | "admin";
+  centerId?: string;
+  providerId?: string;
+  createdAt: string;
 }
 
 export interface Provider {

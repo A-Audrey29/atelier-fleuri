@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProIndexRouteImport } from './routes/pro.index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
@@ -24,7 +25,9 @@ import { Route as ProMissionsRouteImport } from './routes/pro.missions'
 import { Route as ProDisposRouteImport } from './routes/pro.dispos'
 import { Route as AppProvidersRouteImport } from './routes/app.providers'
 import { Route as AppCalendarRouteImport } from './routes/app.calendar'
+import { Route as AppAvailabilityRouteImport } from './routes/app.availability'
 import { Route as AdminWorkshopsRouteImport } from './routes/admin.workshops'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminExportRouteImport } from './routes/admin.export'
@@ -61,6 +64,11 @@ const AppRoute = AppRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -108,9 +116,19 @@ const AppCalendarRoute = AppCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAvailabilityRoute = AppAvailabilityRouteImport.update({
+  id: '/availability',
+  path: '/availability',
+  getParentRoute: () => AppRoute,
+} as any)
 const AdminWorkshopsRoute = AdminWorkshopsRouteImport.update({
   id: '/workshops',
   path: '/workshops',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminProvidersRoute = AdminProvidersRouteImport.update({
@@ -152,6 +170,7 @@ const AppSessionsSessionIdSeancesNRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
@@ -162,7 +181,9 @@ export interface FileRoutesByFullPath {
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
@@ -177,6 +198,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
@@ -184,7 +206,9 @@ export interface FileRoutesByTo {
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
@@ -200,6 +224,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
@@ -210,7 +235,9 @@ export interface FileRoutesById {
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
+  '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
@@ -227,6 +254,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
     | '/admin'
     | '/app'
     | '/forgot-password'
@@ -237,7 +265,9 @@ export interface FileRouteTypes {
     | '/admin/export'
     | '/admin/projects'
     | '/admin/providers'
+    | '/admin/users'
     | '/admin/workshops'
+    | '/app/availability'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
@@ -252,6 +282,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account'
     | '/forgot-password'
     | '/login'
     | '/signup'
@@ -259,7 +290,9 @@ export interface FileRouteTypes {
     | '/admin/export'
     | '/admin/projects'
     | '/admin/providers'
+    | '/admin/users'
     | '/admin/workshops'
+    | '/app/availability'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
@@ -274,6 +307,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/account'
     | '/admin'
     | '/app'
     | '/forgot-password'
@@ -284,7 +318,9 @@ export interface FileRouteTypes {
     | '/admin/export'
     | '/admin/projects'
     | '/admin/providers'
+    | '/admin/users'
     | '/admin/workshops'
+    | '/app/availability'
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
@@ -300,6 +336,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -350,6 +387,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -415,11 +459,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCalendarRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/availability': {
+      id: '/app/availability'
+      path: '/availability'
+      fullPath: '/app/availability'
+      preLoaderRoute: typeof AppAvailabilityRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/admin/workshops': {
       id: '/admin/workshops'
       path: '/workshops'
       fullPath: '/admin/workshops'
       preLoaderRoute: typeof AdminWorkshopsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/providers': {
@@ -479,6 +537,7 @@ interface AdminRouteChildren {
   AdminExportRoute: typeof AdminExportRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminProvidersRoute: typeof AdminProvidersRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminWorkshopsRoute: typeof AdminWorkshopsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -488,6 +547,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminExportRoute: AdminExportRoute,
   AdminProjectsRoute: AdminProjectsRoute,
   AdminProvidersRoute: AdminProvidersRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminWorkshopsRoute: AdminWorkshopsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -506,6 +566,7 @@ const AppSessionsSessionIdRouteWithChildren =
   AppSessionsSessionIdRoute._addFileChildren(AppSessionsSessionIdRouteChildren)
 
 interface AppRouteChildren {
+  AppAvailabilityRoute: typeof AppAvailabilityRoute
   AppCalendarRoute: typeof AppCalendarRoute
   AppProvidersRoute: typeof AppProvidersRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -514,6 +575,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAvailabilityRoute: AppAvailabilityRoute,
   AppCalendarRoute: AppCalendarRoute,
   AppProvidersRoute: AppProvidersRoute,
   AppIndexRoute: AppIndexRoute,
@@ -541,6 +603,7 @@ const ProRouteWithChildren = ProRoute._addFileChildren(ProRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,

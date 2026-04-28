@@ -1,0 +1,54 @@
+// Stores réactifs simples (mock client-side)
+import { useSyncExternalStore } from "react";
+import type { Workshop, Center, UserAccount } from "./types";
+import { workshops as seedWorkshops, centers as seedCenters } from "./seed";
+
+type Listener = () => void;
+
+function createStore<T>(initial: T) {
+  let state = initial;
+  const listeners = new Set<Listener>();
+  return {
+    get: () => state,
+    set: (next: T) => {
+      state = next;
+      listeners.forEach((l) => l());
+    },
+    update: (fn: (s: T) => T) => {
+      state = fn(state);
+      listeners.forEach((l) => l());
+    },
+    subscribe: (l: Listener) => {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    },
+  };
+}
+
+export const workshopsStore = createStore<Workshop[]>([...seedWorkshops]);
+export const centersStore = createStore<Center[]>([...seedCenters]);
+
+// Comptes utilisateur démo
+const initialAccounts: UserAccount[] = [
+  { id: "u1", firstName: "Mathilde", lastName: "Marival", email: "mathilde@cs-abymes.gp", role: "referent", centerId: "c1", createdAt: "2025-01-12" },
+  { id: "u2", firstName: "Karine", lastName: "Lubin", email: "karine@cs-bm.gp", role: "referent", centerId: "c2", createdAt: "2025-01-15" },
+  { id: "u3", firstName: "Stéphane", lastName: "Maillot", email: "stephane@cs-pap.gp", role: "referent", centerId: "c3", createdAt: "2025-02-02" },
+  { id: "u4", firstName: "Marie-Laure", lastName: "Cadet", email: "ml.cadet@asanble.gp", role: "provider", providerId: "p1", createdAt: "2024-11-08" },
+  { id: "u5", firstName: "Jean", lastName: "Bélizaire", email: "j.belizaire@asanble.gp", role: "provider", providerId: "p2", createdAt: "2024-11-10" },
+  { id: "u6", firstName: "Sandra", lastName: "Nérée", email: "s.neree@asanble.gp", role: "provider", providerId: "p3", createdAt: "2024-12-01" },
+  { id: "u7", firstName: "Équipe", lastName: "Asanblé", email: "admin@asanble.gp", role: "admin", createdAt: "2024-10-01" },
+];
+export const accountsStore = createStore<UserAccount[]>(initialAccounts);
+
+// Compte "courant" (mock, change selon l'espace utilisé)
+export const currentUserStore = createStore<UserAccount>(initialAccounts[0]);
+
+export function useStore<T>(store: ReturnType<typeof createStore<T>>): T {
+  return useSyncExternalStore(store.subscribe, store.get, store.get);
+}
+
+export function setCurrentUserByRole(role: "referent" | "provider" | "admin") {
+  const accounts = accountsStore.get();
+  const u = accounts.find((a) => a.role === role);
+  if (u) currentUserStore.set(u);
+}

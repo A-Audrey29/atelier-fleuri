@@ -1,12 +1,16 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AppShell, type NavItem } from "@/components/AppShell";
 import { tickets } from "@/data/seed";
+import { setCurrentUserByRole, useStore, currentUserStore } from "@/data/store";
 
 export const Route = createFileRoute("/pro")({
   component: ProLayout,
 });
 
 function ProLayout() {
+  const user = useStore(currentUserStore);
+  useEffect(() => { if (user.role !== "provider") setCurrentUserByRole("provider"); }, [user.role]);
   const pending = tickets.filter((t) => t.status === "pending" && t.providerId === "p1").length;
 
   const items: NavItem[] = [
@@ -17,7 +21,7 @@ function ProLayout() {
   ];
 
   return (
-    <AppShell brand="Asanblé" spaceLabel="Prestataire" userName="Marie-Laure Cadet" items={items}>
+    <AppShell brand="Asanblé" spaceLabel="Prestataire" userName={`${user.firstName} ${user.lastName}`} items={items}>
       <Outlet />
     </AppShell>
   );
