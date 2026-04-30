@@ -51,6 +51,7 @@ const initialAccounts: UserAccount[] = [
   { id: "u7", firstName: "Équipe", lastName: "Asanblé", email: "admin@asanble.gp", role: "admin", createdAt: "2024-10-01" },
 ];
 export const accountsStore = createStore<UserAccount[]>(initialAccounts);
+export const roleColorsStore = createStore<Record<RoleName, string>>({ ...DEFAULT_ROLE_COLORS });
 
 // Compte "courant" (mock, change selon l'espace utilisé)
 export const currentUserStore = createStore<UserAccount>(initialAccounts[0]);
