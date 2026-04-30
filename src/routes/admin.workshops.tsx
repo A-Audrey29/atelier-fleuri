@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useStore, workshopsStore } from "@/data/store";
+import { useStore, workshopsStore, roleColorsStore, DEFAULT_ROLE_COLORS } from "@/data/store";
 import type { RoleName } from "@/data/types";
 import { SideDrawer } from "@/components/SideDrawer";
+import { ALL_ROLES_LIST, RoleDot } from "@/lib/roleColors";
 
 export const Route = createFileRoute("/admin/workshops")({
   component: WorkshopsPage,
@@ -69,6 +70,8 @@ function WorkshopsPage() {
         ))}
       </ul>
 
+      <RoleColorsPanel />
+
       <SideDrawer
         open={open}
         onClose={() => setOpen(false)}
@@ -125,5 +128,46 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="block text-[11px] uppercase tracking-wider text-ink-400 mb-1">{label}</span>
       {children}
     </label>
+  );
+}
+
+function RoleColorsPanel() {
+  const colors = useStore(roleColorsStore);
+  function setColor(role: RoleName, value: string) {
+    roleColorsStore.update((m) => ({ ...m, [role]: value }));
+  }
+  function reset() {
+    roleColorsStore.set({ ...DEFAULT_ROLE_COLORS });
+  }
+  return (
+    <section className="mt-8">
+      <header className="mb-3 flex items-end justify-between">
+        <div>
+          <h2 className="text-[16px] font-semibold tracking-tight">Couleurs des rôles</h2>
+          <p className="text-[12px] text-ink-500 mt-0.5">
+            Pastilles utilisées dans le calendrier des disponibilités prestataires.
+          </p>
+        </div>
+        <button onClick={reset} className="h-8 px-3 rounded-md border border-ink-200 text-[12px] text-ink-700 hover:bg-ink-50">
+          Réinitialiser
+        </button>
+      </header>
+      <ul className="grid sm:grid-cols-2 gap-1.5 rounded-lg border border-ink-150 bg-card p-3">
+        {ALL_ROLES_LIST.map((r) => (
+          <li key={r} className="flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-ink-50">
+            <RoleDot role={r} size={12} />
+            <span className="text-[13px] flex-1">{r}</span>
+            <input
+              type="color"
+              value={colors[r]}
+              onChange={(e) => setColor(r, e.target.value)}
+              className="h-7 w-12 rounded border border-ink-200 bg-transparent cursor-pointer"
+              aria-label={`Couleur ${r}`}
+            />
+            <code className="text-[11px] text-ink-500 w-[68px] text-right">{colors[r]}</code>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

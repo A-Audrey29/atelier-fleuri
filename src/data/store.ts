@@ -1,7 +1,19 @@
 // Stores réactifs simples (mock client-side)
 import { useSyncExternalStore } from "react";
-import type { Workshop, Center, UserAccount } from "./types";
+import type { Workshop, Center, UserAccount, RoleName } from "./types";
 import { workshops as seedWorkshops, centers as seedCenters } from "./seed";
+
+export const DEFAULT_ROLE_COLORS: Record<RoleName, string> = {
+  "Psychologue":                     "#1f3a5f",
+  "Éducateur":                       "#2f5d3a",
+  "Coach sportif":                   "#a64b1f",
+  "Animateur":                       "#b78a2a",
+  "Éducateur sportif":               "#7a1f3a",
+  "Éducateur sportif pleine nature": "#5d6b1f",
+  "Artiste":                         "#5a2a6e",
+  "Enseignant":                      "#3a4a55",
+  "Intervenant numérique":           "#c4632f",
+};
 
 type Listener = () => void;
 
@@ -39,6 +51,7 @@ const initialAccounts: UserAccount[] = [
   { id: "u7", firstName: "Équipe", lastName: "Asanblé", email: "admin@asanble.gp", role: "admin", createdAt: "2024-10-01" },
 ];
 export const accountsStore = createStore<UserAccount[]>(initialAccounts);
+export const roleColorsStore = createStore<Record<RoleName, string>>({ ...DEFAULT_ROLE_COLORS });
 
 // Compte "courant" (mock, change selon l'espace utilisé)
 export const currentUserStore = createStore<UserAccount>(initialAccounts[0]);
