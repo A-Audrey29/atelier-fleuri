@@ -2,9 +2,10 @@ import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { providers, availabilities } from "@/data/seed";
 import { workshopsStore, useStore } from "@/data/store";
-import type { RoleName } from "@/data/types";
+import type { RoleName, Provider } from "@/data/types";
 import { fmtDayShort, addDaysISO, startOfWeekISO, getDate } from "@/lib/format";
 import { Avatar } from "@/components/Avatar";
+import { ROLE_COLORS, ALL_ROLES_LIST, RoleDot } from "@/lib/roleColors";
 
 export const Route = createFileRoute("/app/availability")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -14,14 +15,10 @@ export const Route = createFileRoute("/app/availability")({
 });
 
 const HOURS = Array.from({ length: 11 }, (_, i) => 8 + i);
-const SLOT_H = 48;
+const SLOT_H = 56;
 const DOW_LABELS = ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."];
 
-const ALL_ROLES: (RoleName | "all")[] = [
-  "all", "Psychologue", "Éducateur", "Coach sportif", "Animateur",
-  "Éducateur sportif", "Éducateur sportif pleine nature",
-  "Artiste", "Enseignant", "Intervenant numérique",
-];
+const ALL_ROLES: (RoleName | "all")[] = ["all", ...ALL_ROLES_LIST];
 
 function todayISO() {
   const d = new Date();
@@ -40,18 +37,16 @@ function AvailabilityPage() {
   const [workshopId, setWorkshopId] = useState<string>(search.workshopId ?? "");
   const selectedWorkshop = workshops.find((w) => w.id === workshopId) ?? null;
 
-  // Si atelier sélectionné, restreint aux rôles requis ; sinon filtre rôle libre
   const [role, setRole] = useState<RoleName | "all">("all");
   const allowedRoles: RoleName[] | null = selectedWorkshop ? selectedWorkshop.requiredRoles : null;
   const effectiveRoleFilter: RoleName | "all" = allowedRoles ? "all" : role;
 
-  const [picked, setPicked] = useState<{ providerId: string; dayISO: string; hour: number } | null>(null);
+  const [picked, setPicked] = useState<{ dayISO: string; hour: number } | null>(null);
+  const [legendOpen, setLegendOpen] = useState(false);
 
   const visibleProviders = useMemo(() => {
     return providers.filter((p) => {
-      if (allowedRoles) {
-        return p.roles.some((r) => allowedRoles.includes(r));
-      }
+      if (allowedRoles) return p.roles.some((r) => allowedRoles.includes(r));
       return effectiveRoleFilter === "all" || p.roles.includes(effectiveRoleFilter);
     });
   }, [allowedRoles, effectiveRoleFilter]);
@@ -72,24 +67,38 @@ function AvailabilityPage() {
     });
   }
 
-  function countForDay(dayISO: string) {
-    return HOURS.reduce((acc, h) => acc + (visibleProviders.some((p) => isAvail(p.id, dayISO, h)) ? 1 : 0), 0);
+  /** Pour un créneau : liste des prestataires libres (filtrés) puis rôles uniques. */
+  function freeAt(dayISO: string, hour: number) {
+    return visibleProviders.filter((p) => isAvail(p.id, dayISO, hour));
   }
 
-  // Matrice semaine
-  const matrix = useMemo(() => {
-    return days.map((d) => HOURS.map((h) => visibleProviders.filter((p) => isAvail(p.id, d, h)).length));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [days, visibleProviders]);
+  function rolesAt(dayISO: string, hour: number): RoleName[] {
+    const free = freeAt(dayISO, hour);
+    const set = new Set<RoleName>();
+    free.forEach((p) => p.roles.forEach((r) => {
+      if (!allowedRoles || allowedRoles.includes(r)) set.add(r);
+    }));
+    return Array.from(set);
+  }
 
-  const pickedProvider = picked ? providers.find((p) => p.id === picked.providerId) : null;
+  function rolesForDay(dayISO: string): RoleName[] {
+    const set = new Set<RoleName>();
+    HOURS.forEach((h) => rolesAt(dayISO, h).forEach((r) => set.add(r)));
+    return Array.from(set);
+  }
+
+  function countForDay(dayISO: string) {
+    return HOURS.reduce((acc, h) => acc + (freeAt(dayISO, h).length > 0 ? 1 : 0), 0);
+  }
+
+  const legendRoles: RoleName[] = allowedRoles ?? ALL_ROLES_LIST;
 
   return (
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-[1300px] mx-auto">
       <header className="flex items-end justify-between gap-3 mb-2 flex-wrap">
         <div>
           <h1 className="text-[24px] font-semibold tracking-tight">Disponibilités prestataires</h1>
-          <p className="text-[13px] text-ink-500 mt-1">Cliquez sur un créneau pour réserver un prestataire.</p>
+          <p className="text-[13px] text-ink-500 mt-1">Cliquez sur un créneau pour voir les prestataires disponibles.</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <div className="inline-flex rounded-md border border-ink-200 bg-card overflow-hidden">
@@ -116,7 +125,7 @@ function AvailabilityPage() {
         </div>
       </header>
 
-      <div className="flex items-center gap-3 mb-4 flex-wrap">
+      <div className="flex items-center gap-3 mb-3 flex-wrap">
         <select value={workshopId} onChange={(e) => setWorkshopId(e.target.value)}
           className="h-9 rounded-md border border-ink-200 bg-card px-3 text-[13px]">
           <option value="">Tous les ateliers</option>
@@ -132,8 +141,25 @@ function AvailabilityPage() {
             Filtré sur : {selectedWorkshop.requiredRoles.join(" · ")}
           </span>
         )}
+        <button
+          onClick={() => setLegendOpen((v) => !v)}
+          className="h-9 px-3 rounded-md border border-ink-200 text-[12px] text-ink-700 hover:bg-ink-50"
+        >
+          {legendOpen ? "Masquer la légende" : "Légende des rôles"}
+        </button>
         <span className="text-[12px] text-ink-500 ml-auto">{visibleProviders.length} prestataire{visibleProviders.length > 1 ? "s" : ""}</span>
       </div>
+
+      {legendOpen && (
+        <div className="rounded-lg border border-ink-150 bg-card px-3 py-2 mb-3 flex flex-wrap gap-x-4 gap-y-1.5">
+          {legendRoles.map((r) => (
+            <span key={r} className="inline-flex items-center gap-1.5 text-[12px] text-ink-700">
+              <RoleDot role={r} size={9} />
+              {r}
+            </span>
+          ))}
+        </div>
+      )}
 
       {view === "week" ? (
         <div className="rounded-xl border border-ink-150 bg-card overflow-hidden">
@@ -158,27 +184,37 @@ function AvailabilityPage() {
                 </div>
               ))}
             </div>
-            {days.map((d, di) => (
+            {days.map((d) => (
               <div key={d} className="relative border-r border-ink-150 last:border-r-0">
-                {HOURS.map((h, hi) => {
-                  const count = matrix[di][hi];
+                {HOURS.map((h) => {
+                  const free = freeAt(d, h);
+                  const count = free.length;
+                  const roles = rolesAt(d, h);
                   const intensity = Math.min(count / Math.max(visibleProviders.length, 1), 1);
                   const bg = count === 0
                     ? "transparent"
-                    : `color-mix(in oklab, var(--s-confirmed-bg) ${20 + intensity * 80}%, transparent)`;
+                    : `color-mix(in oklab, var(--s-confirmed-bg) ${15 + intensity * 60}%, transparent)`;
+                  const tooltip = free
+                    .map((p) => `${p.roles.filter((r) => !allowedRoles || allowedRoles.includes(r)).join(", ")} — ${p.fullName}`)
+                    .join("\n");
                   return (
                     <button
                       key={h}
                       disabled={count === 0}
-                      onClick={() => {
-                        const free = visibleProviders.filter((p) => isAvail(p.id, d, h));
-                        if (free[0]) setPicked({ providerId: free[0].id, dayISO: d, hour: h });
-                      }}
-                      className="w-full block border-b border-ink-150 transition-colors hover:bg-accent-soft/60 disabled:cursor-not-allowed text-[10px] text-ink-700"
+                      onClick={() => setPicked({ dayISO: d, hour: h })}
+                      className="w-full block border-b border-ink-150 transition-colors hover:bg-accent-soft/60 disabled:cursor-not-allowed text-left px-1.5 py-1"
                       style={{ height: SLOT_H, backgroundColor: bg }}
-                      title={count === 0 ? "Aucun prestataire dispo" : `${count} prestataire${count > 1 ? "s" : ""} dispo`}
+                      title={tooltip || "Aucun prestataire dispo"}
                     >
-                      {count > 0 ? count : ""}
+                      {count > 0 && (
+                        <div className="flex flex-col h-full justify-between">
+                          <span className="text-[10px] text-ink-500 leading-none">{count}</span>
+                          <div className="flex flex-wrap gap-[3px]">
+                            {roles.slice(0, 6).map((r) => <RoleDot key={r} role={r} size={7} />)}
+                            {roles.length > 6 && <span className="text-[9px] text-ink-500">+{roles.length - 6}</span>}
+                          </div>
+                        </div>
+                      )}
                     </button>
                   );
                 })}
@@ -190,44 +226,92 @@ function AvailabilityPage() {
         <MonthView
           y={monthCursor.y} m={monthCursor.m}
           countForDay={countForDay}
+          rolesForDay={rolesForDay}
           maxProviders={Math.max(visibleProviders.length, 1)}
           onPick={(dayISO) => {
-            const firstHour = HOURS.find((h) => visibleProviders.some((p) => isAvail(p.id, dayISO, h)));
-            if (firstHour !== undefined) {
-              const free = visibleProviders.find((p) => isAvail(p.id, dayISO, firstHour));
-              if (free) setPicked({ providerId: free.id, dayISO, hour: firstHour });
-            }
+            const firstHour = HOURS.find((h) => freeAt(dayISO, h).length > 0);
+            if (firstHour !== undefined) setPicked({ dayISO, hour: firstHour });
           }}
         />
       )}
 
-      {picked && pickedProvider && (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-[400px] z-40 rounded-xl border border-ink-200 bg-card shadow-xl p-4">
-          <div className="flex items-start gap-3">
-            <Avatar name={pickedProvider.fullName} size={40} />
-            <div className="flex-1 min-w-0">
-              <div className="text-[13px] font-semibold">{pickedProvider.fullName}</div>
-              <div className="text-[12px] text-ink-500">{pickedProvider.roles.join(", ")}</div>
-              <div className="text-[12px] text-ink-700 mt-1">
-                {fmtDayShort(picked.dayISO)} · {picked.hour}h00
-              </div>
-            </div>
-            <button onClick={() => setPicked(null)} className="text-ink-400 hover:text-ink-900">✕</button>
-          </div>
-          <div className="flex gap-2 mt-3">
-            <button onClick={() => setPicked(null)} className="flex-1 h-9 rounded-md bg-ink-900 text-paper text-[13px] font-medium hover:bg-ink-700">
-              Envoyer la demande
-            </button>
-          </div>
-        </div>
+      {picked && (
+        <BookingDrawer
+          dayISO={picked.dayISO}
+          hour={picked.hour}
+          providers={freeAt(picked.dayISO, picked.hour)}
+          allowedRoles={allowedRoles}
+          onClose={() => setPicked(null)}
+        />
       )}
     </div>
   );
 }
 
-function MonthView({ y, m, countForDay, maxProviders, onPick }: {
+function BookingDrawer({ dayISO, hour, providers, allowedRoles, onClose }: {
+  dayISO: string;
+  hour: number;
+  providers: Provider[];
+  allowedRoles: RoleName[] | null;
+  onClose: () => void;
+}) {
+  // Regroupement par rôle (un prestataire peut apparaître sous plusieurs rôles si pertinent)
+  const grouped = useMemo(() => {
+    const map = new Map<RoleName, Provider[]>();
+    providers.forEach((p) => {
+      p.roles.forEach((r) => {
+        if (allowedRoles && !allowedRoles.includes(r)) return;
+        if (!map.has(r)) map.set(r, []);
+        map.get(r)!.push(p);
+      });
+    });
+    return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
+  }, [providers, allowedRoles]);
+
+  return (
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-[420px] z-40 rounded-xl border border-ink-200 bg-card shadow-xl">
+      <div className="flex items-start justify-between gap-3 p-4 border-b border-ink-150">
+        <div>
+          <div className="text-[13px] font-semibold text-ink-900">{fmtDayShort(dayISO)} · {hour}h00</div>
+          <div className="text-[12px] text-ink-500">{providers.length} prestataire{providers.length > 1 ? "s" : ""} disponible{providers.length > 1 ? "s" : ""}</div>
+        </div>
+        <button onClick={onClose} className="text-ink-400 hover:text-ink-900 leading-none">✕</button>
+      </div>
+      <div className="max-h-[50vh] overflow-y-auto p-2">
+        {grouped.length === 0 && (
+          <p className="text-[12px] text-ink-500 px-2 py-3">Aucun prestataire pour les rôles requis.</p>
+        )}
+        {grouped.map(([role, list]) => (
+          <div key={role} className="mb-2 last:mb-0">
+            <div className="flex items-center gap-1.5 px-2 pt-2 pb-1">
+              <RoleDot role={role} size={9} />
+              <span className="text-[11px] font-medium uppercase tracking-wider" style={{ color: ROLE_COLORS[role].ink }}>{role}</span>
+            </div>
+            {list.map((p) => (
+              <button
+                key={p.id}
+                onClick={onClose}
+                className="w-full flex items-center gap-2.5 px-2 py-2 rounded-md hover:bg-ink-50 text-left"
+              >
+                <Avatar name={p.fullName} size={28} />
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] text-ink-900 truncate">{p.fullName}</div>
+                  <div className="text-[11px] text-ink-500 truncate">{p.city}</div>
+                </div>
+                <span className="text-[11px] text-accent-ink">Demander →</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MonthView({ y, m, countForDay, rolesForDay, maxProviders, onPick }: {
   y: number; m: number;
   countForDay: (dayISO: string) => number;
+  rolesForDay: (dayISO: string) => RoleName[];
   maxProviders: number;
   onPick: (dayISO: string) => void;
 }) {
@@ -255,24 +339,31 @@ function MonthView({ y, m, countForDay, maxProviders, onPick }: {
         </div>
         <div className="grid grid-cols-7">
           {cells.map((c, i) => {
-            if (!c.date) return <div key={i} className="border-r border-b border-ink-150 bg-ink-50/30 min-h-[88px] last:border-r-0" />;
+            if (!c.date) return <div key={i} className="border-r border-b border-ink-150 bg-ink-50/30 min-h-[96px] last:border-r-0" />;
             const isToday = c.date === todayISO();
             const cnt = countForDay(c.date);
-            const intensity = Math.min(cnt / (maxProviders * HOURS.length), 1);
+            const roles = cnt > 0 ? rolesForDay(c.date) : [];
+            const intensity = Math.min(cnt / HOURS.length, 1);
             const bg = cnt === 0
               ? "transparent"
-              : `color-mix(in oklab, var(--s-confirmed-bg) ${20 + intensity * 80}%, transparent)`;
+              : `color-mix(in oklab, var(--s-confirmed-bg) ${15 + intensity * 60}%, transparent)`;
             return (
               <button
                 key={i}
                 disabled={cnt === 0}
                 onClick={() => onPick(c.date!)}
-                className={`text-left border-r border-b border-ink-150 min-h-[88px] p-2 last:border-r-0 hover:bg-accent-soft/40 disabled:cursor-not-allowed disabled:hover:bg-transparent ${isToday ? "ring-1 ring-accent" : ""}`}
+                className={`text-left border-r border-b border-ink-150 min-h-[96px] p-2 last:border-r-0 hover:bg-accent-soft/40 disabled:cursor-not-allowed disabled:hover:bg-transparent ${isToday ? "ring-1 ring-accent" : ""}`}
                 style={{ backgroundColor: bg }}
               >
                 <div className={`text-[12px] font-medium ${isToday ? "text-accent-ink" : "text-ink-900"}`}>{c.d}</div>
                 {cnt > 0 && (
-                  <div className="mt-1 text-[10px] text-s-confirmed-ink">{cnt}h dispo</div>
+                  <>
+                    <div className="mt-1 text-[10px] text-s-confirmed-ink">{cnt}h dispo</div>
+                    <div className="mt-1.5 flex flex-wrap gap-[3px]">
+                      {roles.slice(0, 6).map((r) => <RoleDot key={r} role={r} size={7} />)}
+                      {roles.length > 6 && <span className="text-[9px] text-ink-500">+{roles.length - 6}</span>}
+                    </div>
+                  </>
                 )}
               </button>
             );
