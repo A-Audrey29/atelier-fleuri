@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useStore, workshopsStore } from "@/data/store";
+import { useStore, workshopsStore, roleColorsStore, DEFAULT_ROLE_COLORS } from "@/data/store";
 import type { RoleName } from "@/data/types";
 import { SideDrawer } from "@/components/SideDrawer";
+import { ALL_ROLES_LIST, RoleDot } from "@/lib/roleColors";
 
 export const Route = createFileRoute("/admin/workshops")({
   component: WorkshopsPage,
