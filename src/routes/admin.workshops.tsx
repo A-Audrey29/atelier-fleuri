@@ -70,6 +70,8 @@ function WorkshopsPage() {
         ))}
       </ul>
 
+      <RoleColorsPanel />
+
       <SideDrawer
         open={open}
         onClose={() => setOpen(false)}
