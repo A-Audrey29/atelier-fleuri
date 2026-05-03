@@ -44,6 +44,14 @@ Pas de backend dans cette version : toute la donnée vient de
    reconstruis.
 4. [evolutions](./09-evolutions.md) quand tu attaques le backend.
 
+## Captures d'écran
+
+Les captures n'ont pas été embarquées dans cette livraison (le rendu de la
+maquette change vite). Pour générer un jeu de captures à jour, lancer la
+preview puis capturer manuellement les routes : `/`, `/app`,
+`/app/sessions/new`, `/app/availability`, `/app/sessions/s1`,
+`/pro`, `/pro/dispos`, `/admin`, `/admin/workshops`, `/admin/providers`.
+
 ## Conventions de la doc
 
 Chaque écran suit le **même gabarit** :
