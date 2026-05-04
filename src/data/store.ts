@@ -1,6 +1,6 @@
 // Stores réactifs simples (mock client-side)
 import { useSyncExternalStore } from "react";
-import type { Workshop, Center, UserAccount, RoleName } from "./types";
+import type { Workshop, Center, UserAccount, RoleName, Project } from "./types";
 import { workshops as seedWorkshops, centers as seedCenters } from "./seed";
 
 export const DEFAULT_ROLE_COLORS: Record<RoleName, string> = {
