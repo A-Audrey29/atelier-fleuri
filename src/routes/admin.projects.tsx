@@ -80,8 +80,8 @@ function NewProjectDrawer({
   open, onClose, centers, workshops,
 }: {
   open: boolean; onClose: () => void;
-  centers: ReturnType<typeof useStore<typeof centersStore extends ReturnType<infer _R> ? never : never>> extends never ? any[] : any[];
-  workshops: any[];
+  centers: Center[];
+  workshops: Workshop[];
 }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
