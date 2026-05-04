@@ -22,6 +22,9 @@ Définie dans `app.tsx` :
 
 ## Écran : Mes tickets (Accueil)
 
+![Mes tickets — référent](./screenshots/referent-tickets.png)
+
+
 - **Route** : `/app` (exact)
 - **Fichier** : `src/routes/app.index.tsx`
 - **Accès** : référent.
