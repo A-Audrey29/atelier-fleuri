@@ -55,18 +55,48 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 - **Route** : `/admin/projects`
 - **Fichier** : `src/routes/admin.projects.tsx`
-- **État** : maquette statique (2 dispositifs hardcodés).
+- **Données** : `projectsStore`, `workshopsStore`, `centersStore`.
 
 ### Sections
 
-1. Header.
-2. Liste de cartes : nom du dispositif + "<n> centres · Budget X € · Période …".
+1. **Header** : titre + compteur, sous-titre, CTA primaire **+ Nouveau dispositif**
+   (ouvre `SideDrawer`).
+2. **Liste** de cartes dispositif :
+   - Nom + description (ex. "REAAP 2025 — Réseau Écoute Appui…").
+   - Ligne meta : `<n> centres · Budget X € · Période JJ/MM/AAAA → JJ/MM/AAAA · Financeur …`.
+   - Pills des ateliers rattachés (lecture seule).
+
+### `SideDrawer` "Nouveau dispositif"
+
+Champs (formulaire) :
+- **Nom du dispositif** (required, ex. "REAAP 2026").
+- **Description courte** (optionnelle).
+- **Financeur** (texte libre : CAF, ARS, DRAC, Région…).
+- **Budget** (number, en euros).
+- Grille 2 colonnes : **Début** + **Fin** (date pickers natifs).
+- **Centres concernés** : liste de checkboxes scrollable (`max-h-[160px]`),
+  multi-sélection sur tous les centres du `centersStore`. Compteur dans le label.
+- **Ateliers du dispositif** : multi-toggle pills (mêmes interactions que
+  l'écran Ateliers). Compteur dans le label.
+
+Footer : "Créer le dispositif" (disabled si nom vide) / "Annuler". Sortie ou
+fermeture → reset complet du formulaire.
+
+### Règles métier
+
+- À la création : push dans `projectsStore`, `id = pr${Date.now()}`,
+  `createdAt = today (YYYY-MM-DD)`. Aucune validation de doublon.
+- `centerIds` et `workshopIds` peuvent être vides à la création (un dispositif
+  peut être instruit avant que les centres/ateliers ne soient connus).
 
 ### Évolutions
 
-- Vraie entité `Project` (id, name, budget, startDate, endDate, centerIds[],
-  workshopIds[]).
-- Vue détail : sessions actives, taux de couverture, dépenses.
+- Édition / archivage d'un dispositif existant.
+- Page détail : sessions actives par centre, taux de couverture, dépenses
+  consolidées vs budget, exports comptables filtrés par dispositif.
+- Lier les sessions à un dispositif (champ `projectId` sur `Session`) pour
+  agréger automatiquement séances et tickets.
+- Validation d'unicité du nom + plage de dates cohérente (`startDate <= endDate`).
 
 ---
 
