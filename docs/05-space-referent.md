@@ -76,6 +76,9 @@ Pour chaque ticket :
 
 ## Écran : Nouvelle séance d'atelier
 
+![Nouvelle séance — sélection d'atelier](./screenshots/referent-new-session.png)
+
+
 - **Route** : `/app/sessions/new`
 - **Fichier** : `src/routes/app.sessions.new.tsx`
 - **Accès** : référent.
