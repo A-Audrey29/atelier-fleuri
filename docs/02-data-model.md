@@ -181,6 +181,27 @@ interface SeanceComment {
 
 Persistance actuelle : `localStorage` clé `asanble.comments.v1`.
 
+### `Project` (dispositif financé)
+
+```ts
+interface Project {
+  id: string;
+  name: string;            // ex. "REAAP 2025"
+  description?: string;    // ex. "Réseau Écoute Appui Accompagnement Parents"
+  funder?: string;         // ex. "CAF Guadeloupe", "ARS", "DRAC", "Région"
+  budget?: number;         // en euros
+  startDate?: string;      // YYYY-MM-DD
+  endDate?: string;        // YYYY-MM-DD
+  centerIds: string[];     // centres rattachés
+  workshopIds: string[];   // ateliers du dispositif
+  createdAt: string;       // YYYY-MM-DD
+}
+```
+
+Store : `projectsStore` (mémoire). Création via `/admin/projects` (drawer
+"Nouveau dispositif"). Pas de validation de doublon, `centerIds` et
+`workshopIds` peuvent être vides à la création.
+
 ## Relations
 
 ```text
@@ -191,6 +212,9 @@ Seance    1 ──── n  Ticket
 Ticket    n ──── 1  Provider     (nullable)
 Provider  1 ──── 1  Availability
 Seance    1 ──── n  SeanceComment
+
+Project   n ──── n  Center       (via Project.centerIds)
+Project   n ──── n  Workshop     (via Project.workshopIds)
 
 UserAccount n ──── 1  Center     (si role=referent)
 UserAccount 1 ──── 1  Provider   (si role=provider)

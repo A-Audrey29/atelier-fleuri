@@ -22,6 +22,19 @@ export type TicketStatus =
   | "done"
   | "override";
 
+export interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  funder?: string;
+  budget?: number;            // en euros
+  startDate?: string;         // YYYY-MM-DD
+  endDate?: string;           // YYYY-MM-DD
+  centerIds: string[];
+  workshopIds: string[];
+  createdAt: string;
+}
+
 export interface Workshop {
   id: string;
   name: string;

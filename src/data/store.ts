@@ -1,6 +1,6 @@
 // Stores réactifs simples (mock client-side)
 import { useSyncExternalStore } from "react";
-import type { Workshop, Center, UserAccount, RoleName } from "./types";
+import type { Workshop, Center, UserAccount, RoleName, Project } from "./types";
 import { workshops as seedWorkshops, centers as seedCenters } from "./seed";
 
 export const DEFAULT_ROLE_COLORS: Record<RoleName, string> = {
@@ -39,6 +39,28 @@ function createStore<T>(initial: T) {
 
 export const workshopsStore = createStore<Workshop[]>([...seedWorkshops]);
 export const centersStore = createStore<Center[]>([...seedCenters]);
+
+const initialProjects: Project[] = [
+  {
+    id: "pr1", name: "REAAP 2025",
+    description: "Réseau Écoute Appui Accompagnement Parents",
+    funder: "CAF Guadeloupe", budget: 48000,
+    startDate: "2025-01-01", endDate: "2025-12-31",
+    centerIds: ["c1", "c2", "c3", "c4", "c5", "c6"],
+    workshopIds: ["w1", "w2", "w3", "w6"],
+    createdAt: "2024-12-01",
+  },
+  {
+    id: "pr2", name: "Sport-Santé Jeunesse 2025",
+    description: "Promotion de l'activité physique chez les 11-18 ans",
+    funder: "ARS Guadeloupe", budget: 22000,
+    startDate: "2025-03-01", endDate: "2025-09-30",
+    centerIds: ["c1", "c3", "c5"],
+    workshopIds: ["w4", "w5"],
+    createdAt: "2025-01-20",
+  },
+];
+export const projectsStore = createStore<Project[]>(initialProjects);
 
 // Comptes utilisateur démo
 const initialAccounts: UserAccount[] = [
