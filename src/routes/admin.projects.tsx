@@ -203,7 +203,7 @@ function NewProjectDrawer({
 
         <Field label={`Centres concernés (${centerIds.length})`}>
           <div className="max-h-[160px] overflow-y-auto rounded-md border border-ink-150 p-2 space-y-1">
-            {centers.map((c: any) => (
+            {centers.map((c) => (
               <label key={c.id} className="flex items-center gap-2 text-[13px] cursor-pointer">
                 <input
                   type="checkbox"
@@ -218,7 +218,7 @@ function NewProjectDrawer({
 
         <Field label={`Ateliers du dispositif (${workshopIds.length})`}>
           <div className="flex flex-wrap gap-1.5">
-            {workshops.map((w: any) => {
+            {workshops.map((w) => {
               const on = workshopIds.includes(w.id);
               return (
                 <button
