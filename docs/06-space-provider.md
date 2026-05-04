@@ -47,6 +47,9 @@ applique `setCurrentUserByRole("provider")` au mount.
 
 ## Écran : Mes disponibilités
 
+![Mes disponibilités — semaine avec booking confirmé](./screenshots/provider-dispos.png)
+
+
 - **Route** : `/pro/dispos`
 - **Fichier** : `src/routes/pro.dispos.tsx`
 - **Données lues** : `bookingsForProvider("p1")`, etat local
