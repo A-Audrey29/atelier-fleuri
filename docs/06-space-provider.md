@@ -20,6 +20,9 @@ applique `setCurrentUserByRole("provider")` au mount.
 
 ## Écran : Demandes (Accueil)
 
+![Demandes prestataire — accepter / refuser](./screenshots/provider-requests.png)
+
+
 - **Route** : `/pro` (exact)
 - **Fichier** : `src/routes/pro.index.tsx`
 - **Données lues** : `tickets` filtrés par `providerId === PROVIDER_ID`.
@@ -43,6 +46,9 @@ applique `setCurrentUserByRole("provider")` au mount.
 ---
 
 ## Écran : Mes disponibilités
+
+![Mes disponibilités — semaine avec booking confirmé](./screenshots/provider-dispos.png)
+
 
 - **Route** : `/pro/dispos`
 - **Fichier** : `src/routes/pro.dispos.tsx`

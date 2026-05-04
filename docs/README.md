@@ -46,11 +46,20 @@ Pas de backend dans cette version : toute la donnée vient de
 
 ## Captures d'écran
 
-Les captures n'ont pas été embarquées dans cette livraison (le rendu de la
-maquette change vite). Pour générer un jeu de captures à jour, lancer la
-preview puis capturer manuellement les routes : `/`, `/app`,
-`/app/sessions/new`, `/app/availability`, `/app/sessions/s1`,
-`/pro`, `/pro/dispos`, `/admin`, `/admin/workshops`, `/admin/providers`.
+Les captures clés sont rangées dans [`./screenshots/`](./screenshots/) et
+référencées dans les fiches d'écran (espaces référent / prestataire / admin).
+
+| Espace | Écran | Capture |
+| --- | --- | --- |
+| Public | Landing | [`screenshots/00-landing.png`](./screenshots/00-landing.png) |
+| Référent | Mes tickets | [`screenshots/referent-tickets.png`](./screenshots/referent-tickets.png) |
+| Référent | Disponibilités prestataires | [`screenshots/referent-availability.png`](./screenshots/referent-availability.png) |
+| Référent | Nouvelle séance | [`screenshots/referent-new-session.png`](./screenshots/referent-new-session.png) |
+| Prestataire | Demandes (accueil) | [`screenshots/provider-requests.png`](./screenshots/provider-requests.png) |
+| Prestataire | Mes disponibilités | [`screenshots/provider-dispos.png`](./screenshots/provider-dispos.png) |
+| Admin | Triage | [`screenshots/admin-triage.png`](./screenshots/admin-triage.png) |
+| Admin | Ateliers + couleurs des rôles | [`screenshots/admin-workshops.png`](./screenshots/admin-workshops.png) |
+| Admin | Utilisateurs | [`screenshots/admin-users.png`](./screenshots/admin-users.png) |
 
 ## Conventions de la doc
 

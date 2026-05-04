@@ -19,6 +19,9 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 ## Écran : Triage (Tableau de bord)
 
+![Triage admin — KPI et tickets bloqués](./screenshots/admin-triage.png)
+
+
 - **Route** : `/admin` (exact)
 - **Fichier** : `src/routes/admin.index.tsx`
 
@@ -68,6 +71,9 @@ applique `setCurrentUserByRole("admin")` au mount.
 ---
 
 ## Écran : Ateliers
+
+![Ateliers + panneau Couleurs des rôles](./screenshots/admin-workshops.png)
+
 
 - **Route** : `/admin/workshops`
 - **Fichier** : `src/routes/admin.workshops.tsx`
@@ -160,6 +166,9 @@ Footer : "Envoyer l'invitation" (disabled si nom vide ou aucun rôle) / "Annuler
 ---
 
 ## Écran : Utilisateurs
+
+![Utilisateurs — tableau filtrable](./screenshots/admin-users.png)
+
 
 - **Route** : `/admin/users`
 - **Fichier** : `src/routes/admin.users.tsx`

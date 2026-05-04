@@ -22,6 +22,9 @@ Définie dans `app.tsx` :
 
 ## Écran : Mes tickets (Accueil)
 
+![Mes tickets — référent](./screenshots/referent-tickets.png)
+
+
 - **Route** : `/app` (exact)
 - **Fichier** : `src/routes/app.index.tsx`
 - **Accès** : référent.
@@ -72,6 +75,9 @@ Pour chaque ticket :
 ---
 
 ## Écran : Nouvelle séance d'atelier
+
+![Nouvelle séance — sélection d'atelier](./screenshots/referent-new-session.png)
+
 
 - **Route** : `/app/sessions/new`
 - **Fichier** : `src/routes/app.sessions.new.tsx`
@@ -125,6 +131,9 @@ Pour chaque ticket :
 ---
 
 ## Écran : Disponibilités prestataires
+
+![Disponibilités prestataires — vue semaine avec pastilles de rôles](./screenshots/referent-availability.png)
+
 
 - **Route** : `/app/availability?workshopId=<id?>`
 - **Fichier** : `src/routes/app.availability.tsx`

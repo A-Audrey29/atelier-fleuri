@@ -2,6 +2,9 @@
 
 ## Landing
 
+![Landing publique — 3 espaces](./screenshots/00-landing.png)
+
+
 - **Route** : `/`
 - **Fichier** : `src/routes/index.tsx`
 - **Accès** : public.
