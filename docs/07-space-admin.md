@@ -72,6 +72,9 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 ## Écran : Ateliers
 
+![Ateliers + panneau Couleurs des rôles](./screenshots/admin-workshops.png)
+
+
 - **Route** : `/admin/workshops`
 - **Fichier** : `src/routes/admin.workshops.tsx`
 - **Données** : `workshopsStore`, `roleColorsStore`.
