@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SideDrawer } from "@/components/SideDrawer";
 import { projectsStore, workshopsStore, centersStore, useStore } from "@/data/store";
-import type { Project } from "@/data/types";
+import type { Project, Center, Workshop } from "@/data/types";
 
 export const Route = createFileRoute("/admin/projects")({
   component: ProjectsPage,
