@@ -20,6 +20,9 @@ applique `setCurrentUserByRole("provider")` au mount.
 
 ## Écran : Demandes (Accueil)
 
+![Demandes prestataire — accepter / refuser](./screenshots/provider-requests.png)
+
+
 - **Route** : `/pro` (exact)
 - **Fichier** : `src/routes/pro.index.tsx`
 - **Données lues** : `tickets` filtrés par `providerId === PROVIDER_ID`.
