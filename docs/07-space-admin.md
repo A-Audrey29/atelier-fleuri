@@ -19,6 +19,9 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 ## Écran : Triage (Tableau de bord)
 
+![Triage admin — KPI et tickets bloqués](./screenshots/admin-triage.png)
+
+
 - **Route** : `/admin` (exact)
 - **Fichier** : `src/routes/admin.index.tsx`
 
