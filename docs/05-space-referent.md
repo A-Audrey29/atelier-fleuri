@@ -132,6 +132,9 @@ Pour chaque ticket :
 
 ## Écran : Disponibilités prestataires
 
+![Disponibilités prestataires — vue semaine avec pastilles de rôles](./screenshots/referent-availability.png)
+
+
 - **Route** : `/app/availability?workshopId=<id?>`
 - **Fichier** : `src/routes/app.availability.tsx`
 - **Accès** : référent.
