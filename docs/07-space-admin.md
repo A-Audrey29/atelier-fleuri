@@ -167,6 +167,9 @@ Footer : "Envoyer l'invitation" (disabled si nom vide ou aucun rôle) / "Annuler
 
 ## Écran : Utilisateurs
 
+![Utilisateurs — tableau filtrable](./screenshots/admin-users.png)
+
+
 - **Route** : `/admin/users`
 - **Fichier** : `src/routes/admin.users.tsx`
 - **Données** : `accountsStore`, `centersStore`.
