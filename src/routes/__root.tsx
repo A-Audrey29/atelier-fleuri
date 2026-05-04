@@ -37,6 +37,10 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Asanblé" },
+      { name: "twitter:description", content: "Booking d'ateliers multi-séances pour centres sociaux en Guadeloupe." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d917f156-aaf6-4634-b57c-b1b7598be02c/id-preview-7265a32c--ecf8a863-07ff-4d76-b7bd-563d5b42d57c.lovable.app-1777891378846.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d917f156-aaf6-4634-b57c-b1b7598be02c/id-preview-7265a32c--ecf8a863-07ff-4d76-b7bd-563d5b42d57c.lovable.app-1777891378846.png" },
     ],
     links: [
       {
