@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SideDrawer } from "@/components/SideDrawer";
 import { projectsStore, workshopsStore, centersStore, useStore } from "@/data/store";
@@ -18,16 +18,16 @@ function ProjectsPage() {
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-[1000px] mx-auto">
       <header className="mb-5 flex items-end justify-between gap-3">
         <div>
-          <h1 className="text-[24px] font-semibold tracking-tight">Dispositifs</h1>
+          <h1 className="text-[24px] font-semibold tracking-tight">Projets</h1>
           <p className="text-[13px] text-ink-500 mt-1">
-            {projects.length} dispositif{projects.length > 1 ? "s" : ""} · programmes financés et leurs centres associés.
+            {projects.length} projet{projects.length > 1 ? "s" : ""} · clique sur une carte pour entrer dans son espace dédié.
           </p>
         </div>
         <button
           onClick={() => setOpen(true)}
           className="h-9 px-3 rounded-md bg-ink-900 text-paper text-[13px] font-medium hover:bg-ink-700"
         >
-          + Nouveau dispositif
+          + Nouveau projet
         </button>
       </header>
 
@@ -35,9 +35,13 @@ function ProjectsPage() {
         {projects.map((p) => {
           const ws = p.workshopIds.map((id) => workshops.find((w) => w.id === id)?.name).filter(Boolean);
           return (
-            <li key={p.id} className="rounded-lg border border-ink-150 bg-card p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
+            <li key={p.id} className="rounded-lg border border-ink-150 bg-card hover:border-ink-300 transition-colors">
+              <div className="flex items-start gap-3 p-4">
+                <Link
+                  to="/projects/$projectId"
+                  params={{ projectId: p.id }}
+                  className="flex-1 min-w-0"
+                >
                   <div className="text-[14px] font-semibold">
                     {p.name}{p.description ? ` — ${p.description}` : ""}
                   </div>
@@ -54,7 +58,15 @@ function ProjectsPage() {
                       ))}
                     </div>
                   )}
-                </div>
+                </Link>
+                <Link
+                  to="/projects/$projectId/settings"
+                  params={{ projectId: p.id }}
+                  className="shrink-0 h-8 px-2.5 rounded-md border border-ink-200 text-[12px] text-ink-700 hover:bg-ink-50 inline-flex items-center gap-1"
+                  aria-label={`Modifier ${p.name}`}
+                >
+                  ✎ Modifier
+                </Link>
               </div>
             </li>
           );
