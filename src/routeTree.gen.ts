@@ -23,6 +23,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 import { Route as ProProfileRouteImport } from './routes/pro.profile'
 import { Route as ProMissionsRouteImport } from './routes/pro.missions'
+import { Route as ProDocumentsRouteImport } from './routes/pro.documents'
 import { Route as ProDisposRouteImport } from './routes/pro.dispos'
 import { Route as AppProvidersRouteImport } from './routes/app.providers'
 import { Route as AppCalendarRouteImport } from './routes/app.calendar'
@@ -40,6 +41,7 @@ import { Route as ProjectsProjectIdSessionsRouteImport } from './routes/projects
 import { Route as ProjectsProjectIdCentersRouteImport } from './routes/projects.$projectId.centers'
 import { Route as AppSessionsNewRouteImport } from './routes/app.sessions.new'
 import { Route as AppSessionsSessionIdRouteImport } from './routes/app.sessions.$sessionId'
+import { Route as AdminProvidersProviderIdDocumentsRouteImport } from './routes/admin.providers.$providerId.documents'
 import { Route as AppSessionsSessionIdSeancesNRouteImport } from './routes/app.sessions.$sessionId.seances.$n'
 
 const SignupRoute = SignupRouteImport.update({
@@ -110,6 +112,11 @@ const ProProfileRoute = ProProfileRouteImport.update({
 const ProMissionsRoute = ProMissionsRouteImport.update({
   id: '/missions',
   path: '/missions',
+  getParentRoute: () => ProRoute,
+} as any)
+const ProDocumentsRoute = ProDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
   getParentRoute: () => ProRoute,
 } as any)
 const ProDisposRoute = ProDisposRouteImport.update({
@@ -201,6 +208,12 @@ const AppSessionsSessionIdRoute = AppSessionsSessionIdRouteImport.update({
   path: '/sessions/$sessionId',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminProvidersProviderIdDocumentsRoute =
+  AdminProvidersProviderIdDocumentsRouteImport.update({
+    id: '/$providerId/documents',
+    path: '/$providerId/documents',
+    getParentRoute: () => AdminProvidersRoute,
+  } as any)
 const AppSessionsSessionIdSeancesNRoute =
   AppSessionsSessionIdSeancesNRouteImport.update({
     id: '/seances/$n',
@@ -220,13 +233,14 @@ export interface FileRoutesByFullPath {
   '/admin/centers': typeof AdminCentersRoute
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
-  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/providers': typeof AdminProvidersRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
+  '/pro/documents': typeof ProDocumentsRoute
   '/pro/missions': typeof ProMissionsRoute
   '/pro/profile': typeof ProProfileRoute
   '/projects/$projectId': typeof ProjectsProjectIdRouteWithChildren
@@ -240,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
   '/projects/$projectId/workshops': typeof ProjectsProjectIdWorkshopsRoute
   '/projects/$projectId/': typeof ProjectsProjectIdIndexRoute
+  '/admin/providers/$providerId/documents': typeof AdminProvidersProviderIdDocumentsRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesByTo {
@@ -251,13 +266,14 @@ export interface FileRoutesByTo {
   '/admin/centers': typeof AdminCentersRoute
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
-  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/providers': typeof AdminProvidersRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
+  '/pro/documents': typeof ProDocumentsRoute
   '/pro/missions': typeof ProMissionsRoute
   '/pro/profile': typeof ProProfileRoute
   '/admin': typeof AdminIndexRoute
@@ -270,6 +286,7 @@ export interface FileRoutesByTo {
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
   '/projects/$projectId/workshops': typeof ProjectsProjectIdWorkshopsRoute
   '/projects/$projectId': typeof ProjectsProjectIdIndexRoute
+  '/admin/providers/$providerId/documents': typeof AdminProvidersProviderIdDocumentsRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRoutesById {
@@ -285,13 +302,14 @@ export interface FileRoutesById {
   '/admin/centers': typeof AdminCentersRoute
   '/admin/export': typeof AdminExportRoute
   '/admin/projects': typeof AdminProjectsRoute
-  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/providers': typeof AdminProvidersRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
   '/admin/workshops': typeof AdminWorkshopsRoute
   '/app/availability': typeof AppAvailabilityRoute
   '/app/calendar': typeof AppCalendarRoute
   '/app/providers': typeof AppProvidersRoute
   '/pro/dispos': typeof ProDisposRoute
+  '/pro/documents': typeof ProDocumentsRoute
   '/pro/missions': typeof ProMissionsRoute
   '/pro/profile': typeof ProProfileRoute
   '/projects/$projectId': typeof ProjectsProjectIdRouteWithChildren
@@ -305,6 +323,7 @@ export interface FileRoutesById {
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
   '/projects/$projectId/workshops': typeof ProjectsProjectIdWorkshopsRoute
   '/projects/$projectId/': typeof ProjectsProjectIdIndexRoute
+  '/admin/providers/$providerId/documents': typeof AdminProvidersProviderIdDocumentsRoute
   '/app/sessions/$sessionId/seances/$n': typeof AppSessionsSessionIdSeancesNRoute
 }
 export interface FileRouteTypes {
@@ -328,6 +347,7 @@ export interface FileRouteTypes {
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
+    | '/pro/documents'
     | '/pro/missions'
     | '/pro/profile'
     | '/projects/$projectId'
@@ -341,6 +361,7 @@ export interface FileRouteTypes {
     | '/projects/$projectId/settings'
     | '/projects/$projectId/workshops'
     | '/projects/$projectId/'
+    | '/admin/providers/$providerId/documents'
     | '/app/sessions/$sessionId/seances/$n'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -359,6 +380,7 @@ export interface FileRouteTypes {
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
+    | '/pro/documents'
     | '/pro/missions'
     | '/pro/profile'
     | '/admin'
@@ -371,6 +393,7 @@ export interface FileRouteTypes {
     | '/projects/$projectId/settings'
     | '/projects/$projectId/workshops'
     | '/projects/$projectId'
+    | '/admin/providers/$providerId/documents'
     | '/app/sessions/$sessionId/seances/$n'
   id:
     | '__root__'
@@ -392,6 +415,7 @@ export interface FileRouteTypes {
     | '/app/calendar'
     | '/app/providers'
     | '/pro/dispos'
+    | '/pro/documents'
     | '/pro/missions'
     | '/pro/profile'
     | '/projects/$projectId'
@@ -405,6 +429,7 @@ export interface FileRouteTypes {
     | '/projects/$projectId/settings'
     | '/projects/$projectId/workshops'
     | '/projects/$projectId/'
+    | '/admin/providers/$providerId/documents'
     | '/app/sessions/$sessionId/seances/$n'
   fileRoutesById: FileRoutesById
 }
@@ -518,6 +543,13 @@ declare module '@tanstack/react-router' {
       path: '/missions'
       fullPath: '/pro/missions'
       preLoaderRoute: typeof ProMissionsRouteImport
+      parentRoute: typeof ProRoute
+    }
+    '/pro/documents': {
+      id: '/pro/documents'
+      path: '/documents'
+      fullPath: '/pro/documents'
+      preLoaderRoute: typeof ProDocumentsRouteImport
       parentRoute: typeof ProRoute
     }
     '/pro/dispos': {
@@ -639,6 +671,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSessionsSessionIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin/providers/$providerId/documents': {
+      id: '/admin/providers/$providerId/documents'
+      path: '/$providerId/documents'
+      fullPath: '/admin/providers/$providerId/documents'
+      preLoaderRoute: typeof AdminProvidersProviderIdDocumentsRouteImport
+      parentRoute: typeof AdminProvidersRoute
+    }
     '/app/sessions/$sessionId/seances/$n': {
       id: '/app/sessions/$sessionId/seances/$n'
       path: '/seances/$n'
@@ -649,11 +688,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminProvidersRouteChildren {
+  AdminProvidersProviderIdDocumentsRoute: typeof AdminProvidersProviderIdDocumentsRoute
+}
+
+const AdminProvidersRouteChildren: AdminProvidersRouteChildren = {
+  AdminProvidersProviderIdDocumentsRoute:
+    AdminProvidersProviderIdDocumentsRoute,
+}
+
+const AdminProvidersRouteWithChildren = AdminProvidersRoute._addFileChildren(
+  AdminProvidersRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminCentersRoute: typeof AdminCentersRoute
   AdminExportRoute: typeof AdminExportRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
-  AdminProvidersRoute: typeof AdminProvidersRoute
+  AdminProvidersRoute: typeof AdminProvidersRouteWithChildren
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWorkshopsRoute: typeof AdminWorkshopsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -663,7 +715,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCentersRoute: AdminCentersRoute,
   AdminExportRoute: AdminExportRoute,
   AdminProjectsRoute: AdminProjectsRoute,
-  AdminProvidersRoute: AdminProvidersRoute,
+  AdminProvidersRoute: AdminProvidersRouteWithChildren,
   AdminUsersRoute: AdminUsersRoute,
   AdminWorkshopsRoute: AdminWorkshopsRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -704,6 +756,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface ProRouteChildren {
   ProDisposRoute: typeof ProDisposRoute
+  ProDocumentsRoute: typeof ProDocumentsRoute
   ProMissionsRoute: typeof ProMissionsRoute
   ProProfileRoute: typeof ProProfileRoute
   ProIndexRoute: typeof ProIndexRoute
@@ -711,6 +764,7 @@ interface ProRouteChildren {
 
 const ProRouteChildren: ProRouteChildren = {
   ProDisposRoute: ProDisposRoute,
+  ProDocumentsRoute: ProDocumentsRoute,
   ProMissionsRoute: ProMissionsRoute,
   ProProfileRoute: ProProfileRoute,
   ProIndexRoute: ProIndexRoute,
