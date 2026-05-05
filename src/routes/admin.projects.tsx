@@ -228,7 +228,7 @@ function NewProjectDrawer({
           </div>
         </Field>
 
-        <Field label={`Ateliers du dispositif (${workshopIds.length})`}>
+        <Field label={`Ateliers du projet (${workshopIds.length})`}>
           <div className="flex flex-wrap gap-1.5">
             {workshops.map((w) => {
               const on = workshopIds.includes(w.id);
