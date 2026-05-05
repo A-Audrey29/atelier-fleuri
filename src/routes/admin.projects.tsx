@@ -138,7 +138,7 @@ function NewProjectDrawer({
     <SideDrawer
       open={open}
       onClose={() => { reset(); onClose(); }}
-      title="Nouveau dispositif"
+      title="Nouveau projet"
       subtitle="Créer un projet"
       width={420}
       footer={
@@ -151,13 +151,13 @@ function NewProjectDrawer({
             onClick={submit}
             className="h-9 px-3 rounded-md bg-ink-900 text-paper text-[13px] font-medium disabled:opacity-50 hover:bg-ink-700"
           >
-            Créer le dispositif
+            Créer le projet
           </button>
         </div>
       }
     >
       <div className="space-y-4">
-        <Field label="Nom du dispositif">
+        <Field label="Nom du projet">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
