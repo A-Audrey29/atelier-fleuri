@@ -9,7 +9,7 @@ coordonner leurs **séances d'ateliers** entre :
   besoins),
 - les **prestataires intervenants** (psychologues, éducateurs, coachs sportifs,
   animateurs, artistes…),
-- l'équipe **Asanblé** (admin) qui supervise dispositifs, prestataires et
+- l'équipe **Asanblé** (admin) qui supervise projets, prestataires et
   facturation.
 
 Objectif : remplacer Excel + téléphone par un workflow clair (création →
@@ -24,7 +24,7 @@ du compte connecté détermine l'espace par défaut.
 | --- | --- | --- | --- |
 | Référent famille | `/app/*` | "Référent" | Mes tickets, Disponibilités, Mes séances, Prestataires, Nouvelle séance |
 | Prestataire | `/pro/*` | "Prestataire" | Demandes, Mes dispos, Missions, Profil |
-| Admin Asanblé | `/admin/*` | "Admin" | Triage, Dispositifs, Ateliers, Prestataires, Centres, Utilisateurs, Export |
+| Admin Asanblé | `/admin/*` | "Admin" | Triage, Projets, Ateliers, Prestataires, Centres, Utilisateurs, Export |
 
 Chaque espace utilise le composant partagé [`AppShell`](./04-shared-components.md#appshell).
 
@@ -39,7 +39,7 @@ Chaque espace utilise le composant partagé [`AppShell`](./04-shared-components.
 | **Ticket** (`Ticket`) | Demande envoyée à un prestataire pour assurer **un rôle** sur **une séance**. | "Psychologue · Séance 3 · Marie-Laure Cadet · confirmed" |
 | **Rôle** (`RoleName`) | Spécialité d'un intervenant. 9 valeurs énumérées. | "Psychologue", "Éducateur sportif pleine nature" |
 | **Disponibilité** (`Availability`) | Plages horaires récurrentes (lun-dim) + exceptions ponctuelles, par prestataire. | Lun-Ven 9h-12h / 14h-18h |
-| **Dispositif** | Programme financé qui regroupe plusieurs sessions sur plusieurs centres. | "REAAP 2025", "Sport-Santé Jeunesse 2025" |
+| **Projet** | Programme financé qui regroupe plusieurs sessions sur plusieurs centres. | "REAAP 2025", "Sport-Santé Jeunesse 2025" |
 
 ## Parcours globaux
 
