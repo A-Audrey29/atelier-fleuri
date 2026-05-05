@@ -258,3 +258,55 @@ Formulaire :
 - Server function streamée (CSV ou XLSX via SheetJS côté serveur).
 - Colonnes : Centre, Atelier, Session, Séance, Date, Prestataire, Rôle,
   Durée, Statut, Tarif horaire, Total HT.
+
+---
+
+## Espace Projet (workspace dédié)
+
+Quand l'admin clique sur la carte d'un projet dans `/admin/projects`, il
+entre dans un **espace projet** indépendant avec sa propre sidebar.
+
+- **Route racine** : `/projects/$projectId`
+- **Layout** : `src/routes/projects.$projectId.tsx`
+- Header sidebar : nom du projet (brand) + label "Projet".
+- **Top slot** (au-dessus du menu) : sélecteur `<select>` listant tous les
+  projets pour switcher instantanément + lien "← Tous les projets".
+
+### Sidebar contextuelle
+
+| Label | Route | Fichier |
+| --- | --- | --- |
+| Vue d'ensemble | `/projects/$projectId` (exact) | `projects.$projectId.index.tsx` |
+| Paramètres | `/projects/$projectId/settings` | `projects.$projectId.settings.tsx` |
+| Centres | `/projects/$projectId/centers` | `projects.$projectId.centers.tsx` |
+| Ateliers | `/projects/$projectId/workshops` | `projects.$projectId.workshops.tsx` |
+| Sessions | `/projects/$projectId/sessions` | `projects.$projectId.sessions.tsx` |
+
+### Vue d'ensemble
+
+3 KPI (Centres, Ateliers, Budget) + cartes Informations / Centres rattachés /
+Ateliers. Bouton **"Modifier le projet"** → `/settings`.
+
+### Paramètres
+
+Formulaire d'édition (mêmes champs que la création) + bouton **Supprimer le
+projet** (rouge, confirm). À la sauvegarde, mise à jour `projectsStore`.
+
+### Sessions
+
+Liste filtrée des `sessions` dont `workshopId ∈ project.workshopIds` ET
+`centerId ∈ project.centerIds`. Lien vers la vue détail référent.
+
+### Accès
+
+L'admin entre via `/admin/projects` :
+- clic sur la carte → `/projects/$projectId` (vue d'ensemble)
+- clic sur **✎ Modifier** → `/projects/$projectId/settings` directement
+
+### Documents prestataire (admin)
+
+Depuis `/admin/providers`, chaque ligne expose un bouton **"Documents"** →
+`/admin/providers/$providerId/documents`. L'admin peut téléverser des
+documents pour le prestataire ; il ne peut supprimer que ceux qu'il a
+lui-même déposés (le prestataire conserve la suppression de ses propres
+fichiers).
