@@ -181,7 +181,7 @@ interface SeanceComment {
 
 Persistance actuelle : `localStorage` clé `asanble.comments.v1`.
 
-### `Project` (dispositif financé)
+### `Project` (projet financé)
 
 ```ts
 interface Project {
@@ -358,3 +358,31 @@ getDow(d) / getDate(d)
   unique côté `providers.availability`.
 - Ajouter `Workshop.color` ou conserver le mapping global ? Décision : garder
   global (un rôle = une couleur, indépendante de l'atelier).
+
+### `ProviderDocument`
+
+Documents administratifs attachés à un prestataire (diplômes, RIB, contrats…).
+
+```ts
+interface ProviderDocument {
+  id: string;
+  providerId: string;
+  name: string;
+  sizeBytes: number;
+  mimeType: string;
+  dataUrl: string;        // mock storage (base64)
+  uploadedBy: string;     // userId du déposant
+  uploadedByName: string;
+  uploadedByRole: "admin" | "provider";
+  uploadedAt: string;     // ISO
+}
+```
+
+Règles :
+- Lecture : prestataire concerné + admins.
+- Écriture (upload) : prestataire concerné + admins.
+- Suppression : uniquement par le déposant (`uploadedBy === currentUser.id`).
+
+À migrer vers Lovable Cloud Storage avec bucket privé et policies RLS sur
+`storage.objects` (`bucket_id = 'provider-docs'` + path préfixé par
+`providerId`).
