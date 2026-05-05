@@ -13,10 +13,11 @@ export interface NavItem {
 
 interface AppShellProps {
   brand: string;
-  spaceLabel: string;
+  spaceLabel: ReactNode;
   userName: string;
   items: NavItem[];
   children: ReactNode;
+  topSlot?: ReactNode;
 }
 
 function isActive(pathname: string, to: string, exact?: boolean) {
@@ -24,7 +25,7 @@ function isActive(pathname: string, to: string, exact?: boolean) {
   return pathname === to || pathname.startsWith(to + "/");
 }
 
-export function AppShell({ brand, spaceLabel, userName, items, children }: AppShellProps) {
+export function AppShell({ brand, spaceLabel, userName, items, children, topSlot }: AppShellProps) {
   const { pathname } = useLocation();
 
   return (
@@ -40,6 +41,7 @@ export function AppShell({ brand, spaceLabel, userName, items, children }: AppSh
             <span className="text-[11px] text-ink-400 uppercase tracking-wider truncate">{spaceLabel}</span>
           </div>
         </Link>
+        {topSlot && <div className="px-3 py-3 border-b border-ink-150">{topSlot}</div>}
         <nav className="flex-1 px-2 py-3">
           <ul className="space-y-0.5">
             {items.map((it) => {
