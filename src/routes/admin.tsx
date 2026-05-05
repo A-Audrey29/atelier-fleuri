@@ -15,7 +15,7 @@ function AdminLayout() {
 
   const items: NavItem[] = [
     { to: "/admin", label: "Triage", icon: <Icon path="M3 12l4-9 5 18 4-13 5 4" />, badge: blocked, exact: true },
-    { to: "/admin/projects", label: "Dispositifs", icon: <Icon path="M3 7h18v12H3zM3 7l3-3h12l3 3" /> },
+    { to: "/admin/projects", label: "Projets", icon: <Icon path="M3 7h18v12H3zM3 7l3-3h12l3 3" /> },
     { to: "/admin/workshops", label: "Ateliers", icon: <Icon path="M4 5h16M4 12h16M4 19h10" /> },
     { to: "/admin/providers", label: "Prestataires", icon: <Icon path="M16 11a4 4 0 1 0-8 0M3 20a7 7 0 0 1 14 0" /> },
     { to: "/admin/centers", label: "Centres", icon: <Icon path="M3 21V9l9-6 9 6v12M9 21v-7h6v7" /> },

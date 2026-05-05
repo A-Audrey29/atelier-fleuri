@@ -137,3 +137,34 @@ applique `setCurrentUserByRole("provider")` au mount.
 - Édition inline / drawer pour mettre à jour téléphone, email, zone.
 - Upload réel des documents (Lovable Cloud Storage).
 - Synchroniser avec `/account` (compte) pour les infos communes (email).
+
+---
+
+## Écran : Mes documents
+
+- **Route** : `/pro/documents`
+- **Fichier** : `src/routes/pro.documents.tsx`
+- **Composant** : `src/components/DocumentsPanel.tsx` (réutilisé côté admin).
+- **Données** : `providerDocumentsStore` (mock client).
+
+### Sections
+
+1. Header : titre + sous-titre.
+2. Carte **Documents** :
+   - Action **+ Téléverser** (input `<file multiple>`, lecture en `dataUrl`).
+   - Liste : icône, nom du fichier, taille, déposeur (badge `Admin` ou
+     `Prestataire`), date. Boutons **Télécharger** et **Supprimer**.
+
+### Règles métier
+
+- Tous les documents `providerId === currentUser.providerId` sont visibles.
+- L'admin et le prestataire peuvent **uploader** et **télécharger**.
+- La **suppression** est restreinte au déposant (`uploadedBy === currentUser.id`).
+- Stockage actuellement client (base64 dataUrl) — à migrer vers Storage
+  Lovable Cloud avec policies RLS (`auth.uid() = uploaded_by` pour DELETE).
+
+### Évolutions
+
+- Catégorisation (Diplôme, RIB, Attestation URSSAF…).
+- Statut de validation administrative par l'admin.
+- Versioning + rappels d'expiration (assurance, attestations annuelles).

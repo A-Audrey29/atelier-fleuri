@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { providers as seedProviders } from "@/data/seed";
 import type { Provider, RoleName } from "@/data/types";
@@ -61,6 +61,13 @@ function ProvidersPage() {
               <div className="text-[14px] font-medium">{p.fullName}</div>
               <div className="text-[12px] text-ink-500">{p.roles.join(", ")} · {p.city}</div>
             </div>
+            <Link
+              to="/admin/providers/$providerId/documents"
+              params={{ providerId: p.id }}
+              className="h-8 px-2.5 rounded-md border border-ink-200 text-[12px] text-ink-700 hover:bg-ink-50"
+            >
+              Documents
+            </Link>
             <span className="text-[11px] text-s-confirmed-ink bg-s-confirmed-bg border border-s-confirmed-border rounded-full px-2 py-0.5">Validé</span>
           </li>
         ))}

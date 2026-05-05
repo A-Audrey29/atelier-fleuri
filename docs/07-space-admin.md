@@ -8,7 +8,7 @@ applique `setCurrentUserByRole("admin")` au mount.
 | Label | Route | Badge dynamique |
 | --- | --- | --- |
 | Triage | `/admin` (exact) | Nb tickets `refused | blocked` |
-| Dispositifs | `/admin/projects` | — |
+| Projets | `/admin/projects` | — |
 | Ateliers | `/admin/workshops` | — |
 | Prestataires | `/admin/providers` | — |
 | Centres | `/admin/centers` | — |
@@ -45,13 +45,13 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 ### Évolutions
 
-- Filtres : par centre, par dispositif, par dispositif financeur.
+- Filtres : par centre, par projet, par projet financeur.
 - Action "Forcer la confirmation" (status `override`) avec audit log.
 - "Notifier le référent" en un clic.
 
 ---
 
-## Écran : Dispositifs
+## Écran : Projets
 
 - **Route** : `/admin/projects`
 - **Fichier** : `src/routes/admin.projects.tsx`
@@ -59,42 +59,42 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 ### Sections
 
-1. **Header** : titre + compteur, sous-titre, CTA primaire **+ Nouveau dispositif**
+1. **Header** : titre + compteur, sous-titre, CTA primaire **+ Nouveau projet**
    (ouvre `SideDrawer`).
-2. **Liste** de cartes dispositif :
+2. **Liste** de cartes projet :
    - Nom + description (ex. "REAAP 2025 — Réseau Écoute Appui…").
    - Ligne meta : `<n> centres · Budget X € · Période JJ/MM/AAAA → JJ/MM/AAAA · Financeur …`.
    - Pills des ateliers rattachés (lecture seule).
 
-### `SideDrawer` "Nouveau dispositif"
+### `SideDrawer` "Nouveau projet"
 
 Champs (formulaire) :
-- **Nom du dispositif** (required, ex. "REAAP 2026").
+- **Nom du projet** (required, ex. "REAAP 2026").
 - **Description courte** (optionnelle).
 - **Financeur** (texte libre : CAF, ARS, DRAC, Région…).
 - **Budget** (number, en euros).
 - Grille 2 colonnes : **Début** + **Fin** (date pickers natifs).
 - **Centres concernés** : liste de checkboxes scrollable (`max-h-[160px]`),
   multi-sélection sur tous les centres du `centersStore`. Compteur dans le label.
-- **Ateliers du dispositif** : multi-toggle pills (mêmes interactions que
+- **Ateliers du projet** : multi-toggle pills (mêmes interactions que
   l'écran Ateliers). Compteur dans le label.
 
-Footer : "Créer le dispositif" (disabled si nom vide) / "Annuler". Sortie ou
+Footer : "Créer le projet" (disabled si nom vide) / "Annuler". Sortie ou
 fermeture → reset complet du formulaire.
 
 ### Règles métier
 
 - À la création : push dans `projectsStore`, `id = pr${Date.now()}`,
   `createdAt = today (YYYY-MM-DD)`. Aucune validation de doublon.
-- `centerIds` et `workshopIds` peuvent être vides à la création (un dispositif
+- `centerIds` et `workshopIds` peuvent être vides à la création (un projet
   peut être instruit avant que les centres/ateliers ne soient connus).
 
 ### Évolutions
 
-- Édition / archivage d'un dispositif existant.
+- Édition / archivage d'un projet existant.
 - Page détail : sessions actives par centre, taux de couverture, dépenses
-  consolidées vs budget, exports comptables filtrés par dispositif.
-- Lier les sessions à un dispositif (champ `projectId` sur `Session`) pour
+  consolidées vs budget, exports comptables filtrés par projet.
+- Lier les sessions à un projet (champ `projectId` sur `Session`) pour
   agréger automatiquement séances et tickets.
 - Validation d'unicité du nom + plage de dates cohérente (`startDate <= endDate`).
 
@@ -142,7 +142,7 @@ Footer : "Créer l'atelier" (disabled si nom vide) / "Annuler".
 ### Évolutions
 
 - Édition / archivage d'un atelier existant.
-- Lier l'atelier à un dispositif (financeur).
+- Lier l'atelier à un projet (financeur).
 - Validation : `requiredRoles.length >= 1`.
 
 ---
@@ -258,3 +258,55 @@ Formulaire :
 - Server function streamée (CSV ou XLSX via SheetJS côté serveur).
 - Colonnes : Centre, Atelier, Session, Séance, Date, Prestataire, Rôle,
   Durée, Statut, Tarif horaire, Total HT.
+
+---
+
+## Espace Projet (workspace dédié)
+
+Quand l'admin clique sur la carte d'un projet dans `/admin/projects`, il
+entre dans un **espace projet** indépendant avec sa propre sidebar.
+
+- **Route racine** : `/projects/$projectId`
+- **Layout** : `src/routes/projects.$projectId.tsx`
+- Header sidebar : nom du projet (brand) + label "Projet".
+- **Top slot** (au-dessus du menu) : sélecteur `<select>` listant tous les
+  projets pour switcher instantanément + lien "← Tous les projets".
+
+### Sidebar contextuelle
+
+| Label | Route | Fichier |
+| --- | --- | --- |
+| Vue d'ensemble | `/projects/$projectId` (exact) | `projects.$projectId.index.tsx` |
+| Paramètres | `/projects/$projectId/settings` | `projects.$projectId.settings.tsx` |
+| Centres | `/projects/$projectId/centers` | `projects.$projectId.centers.tsx` |
+| Ateliers | `/projects/$projectId/workshops` | `projects.$projectId.workshops.tsx` |
+| Sessions | `/projects/$projectId/sessions` | `projects.$projectId.sessions.tsx` |
+
+### Vue d'ensemble
+
+3 KPI (Centres, Ateliers, Budget) + cartes Informations / Centres rattachés /
+Ateliers. Bouton **"Modifier le projet"** → `/settings`.
+
+### Paramètres
+
+Formulaire d'édition (mêmes champs que la création) + bouton **Supprimer le
+projet** (rouge, confirm). À la sauvegarde, mise à jour `projectsStore`.
+
+### Sessions
+
+Liste filtrée des `sessions` dont `workshopId ∈ project.workshopIds` ET
+`centerId ∈ project.centerIds`. Lien vers la vue détail référent.
+
+### Accès
+
+L'admin entre via `/admin/projects` :
+- clic sur la carte → `/projects/$projectId` (vue d'ensemble)
+- clic sur **✎ Modifier** → `/projects/$projectId/settings` directement
+
+### Documents prestataire (admin)
+
+Depuis `/admin/providers`, chaque ligne expose un bouton **"Documents"** →
+`/admin/providers/$providerId/documents`. L'admin peut téléverser des
+documents pour le prestataire ; il ne peut supprimer que ceux qu'il a
+lui-même déposés (le prestataire conserve la suppression de ses propres
+fichiers).

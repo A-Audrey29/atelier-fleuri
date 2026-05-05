@@ -1,6 +1,6 @@
 // Stores réactifs simples (mock client-side)
 import { useSyncExternalStore } from "react";
-import type { Workshop, Center, UserAccount, RoleName, Project } from "./types";
+import type { Workshop, Center, UserAccount, RoleName, Project, ProviderDocument } from "./types";
 import { workshops as seedWorkshops, centers as seedCenters } from "./seed";
 
 export const DEFAULT_ROLE_COLORS: Record<RoleName, string> = {
@@ -74,6 +74,21 @@ const initialAccounts: UserAccount[] = [
 ];
 export const accountsStore = createStore<UserAccount[]>(initialAccounts);
 export const roleColorsStore = createStore<Record<RoleName, string>>({ ...DEFAULT_ROLE_COLORS });
+
+export const providerDocumentsStore = createStore<ProviderDocument[]>([
+  {
+    id: "doc1", providerId: "p1", name: "Diplôme État Psychologue.pdf",
+    sizeBytes: 184320, mimeType: "application/pdf",
+    dataUrl: "", uploadedBy: "u7", uploadedByName: "Équipe Asanblé",
+    uploadedByRole: "admin", uploadedAt: "2025-02-12T10:00:00",
+  },
+  {
+    id: "doc2", providerId: "p1", name: "RIB.pdf",
+    sizeBytes: 56320, mimeType: "application/pdf",
+    dataUrl: "", uploadedBy: "u4", uploadedByName: "Marie-Laure Cadet",
+    uploadedByRole: "provider", uploadedAt: "2025-03-04T14:22:00",
+  },
+]);
 
 // Compte "courant" (mock, change selon l'espace utilisé)
 export const currentUserStore = createStore<UserAccount>(initialAccounts[0]);
