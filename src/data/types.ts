@@ -110,3 +110,16 @@ export interface Availability {
   // Exceptions: dates bloquées (YYYY-MM-DD)
   blockedDates: string[];
 }
+
+export interface ProviderDocument {
+  id: string;
+  providerId: string;
+  name: string;
+  sizeBytes: number;
+  mimeType: string;
+  dataUrl: string;        // mock storage (base64)
+  uploadedBy: string;     // userId of uploader
+  uploadedByName: string;
+  uploadedByRole: "admin" | "provider";
+  uploadedAt: string;     // ISO
+}
