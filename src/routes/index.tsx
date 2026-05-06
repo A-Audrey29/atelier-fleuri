@@ -61,7 +61,7 @@ function Landing() {
           />
           <Card
             title="Admin Asanblé"
-            desc="Triage des blocages, supervision des dispositifs, exports comptables conformes."
+            desc="Dashboard de supervision, déblocage des tickets, gestion des projets et exports comptables conformes."
             cta={<Link to="/admin" className="text-accent-ink hover:underline text-[13px]">Espace admin ›</Link>}
           />
         </section>

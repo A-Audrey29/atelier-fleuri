@@ -7,7 +7,7 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 | Label | Route | Badge dynamique |
 | --- | --- | --- |
-| Triage | `/admin` (exact) | Nb tickets `refused | blocked` |
+| Dashboard | `/admin` (exact) | Nb tickets `refused | blocked` |
 | Projets | `/admin/projects` | — |
 | Ateliers | `/admin/workshops` | — |
 | Prestataires | `/admin/providers` | — |
@@ -17,22 +17,33 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 ---
 
-## Écran : Triage (Tableau de bord)
+## Écran : Dashboard administrateur
 
-![Triage admin — KPI et tickets bloqués](./screenshots/admin-triage.png)
+![Dashboard admin — KPI et tickets bloqués](./screenshots/admin-triage.png)
 
 
 - **Route** : `/admin` (exact)
 - **Fichier** : `src/routes/admin.index.tsx`
 
+C'est la page d'atterrissage de l'admin : un **tableau de bord
+opérationnel** qui résume tout ce qui demande une intervention humaine sur la
+plateforme. L'admin doit pouvoir, en un coup d'œil, voir s'il y a une crise
+en cours (tickets bloqués), des prestataires lents (SLA dépassés) ou des
+sessions qui risquent de ne pas avoir tous les rôles couverts à la date prévue.
+
 ### Sections
 
-1. **Header** : "Triage" + sous-titre.
-2. **3 stats KPI** (cartes colorées) :
-   - Tickets bloqués (rouge `s-refused-*`).
-   - SLA dépassés (jaune `s-pending-*`).
-   - Sessions à risque (violet `s-override-*`).
-3. **Tickets bloqués** : liste de cartes avec workshop + ville, séance + date
+1. **Header** : "Dashboard administrateur" + sous-titre explicatif.
+2. **3 stats KPI** (cartes colorées) avec un texte d'aide sous chaque chiffre :
+   - **Tickets bloqués** (rouge) : tickets refusés par le prestataire ou
+     marqués bloqués par le système. Action immédiate requise.
+   - **Délais dépassés** (jaune) : tickets `pending` depuis plus que la durée
+     SLA (24 h par défaut). À relancer.
+   - **Sessions à risque** (violet) : sessions ayant au moins une séance avec
+     un ticket refusé ou vide.
+3. **Légende SLA** : rappel inline que <em>SLA = Service Level Agreement</em>
+   = délai de réponse attendu d'un prestataire (24 h par défaut).
+4. **Liste "Tickets bloqués"** : cartes avec workshop + ville, séance + date
    + rôle (+ "refusé par <nom>" si applicable), `StatusChip`, lien
    "Débloquer ›" → `/app/sessions/$sessionId/seances/$n` (vue référent).
 
