@@ -10,6 +10,8 @@ import { ROLE_COLORS, ALL_ROLES_LIST, RoleDot } from "@/lib/roleColors";
 export const Route = createFileRoute("/app/availability")({
   validateSearch: (s: Record<string, unknown>) => ({
     workshopId: typeof s.workshopId === "string" ? s.workshopId : "",
+    // Indices des slots actifs (séparés par ","), ex. "0,2"
+    slots: typeof s.slots === "string" ? s.slots : "",
   }),
   component: AvailabilityPage,
 });
@@ -38,7 +40,16 @@ function AvailabilityPage() {
   const selectedWorkshop = workshops.find((w) => w.id === workshopId) ?? null;
 
   const [role, setRole] = useState<RoleName | "all">("all");
-  const allowedRoles: RoleName[] | null = selectedWorkshop ? selectedWorkshop.requiredRoles : null;
+  // Slots actifs (sous-ensemble des requiredRoles de l'atelier)
+  const activeSlots = useMemo(() => {
+    if (!selectedWorkshop) return null;
+    if (!search.slots) return selectedWorkshop.requiredRoles;
+    const idxs = new Set(search.slots.split(",").map((x) => +x));
+    return selectedWorkshop.requiredRoles.filter((_, i) => idxs.has(i));
+  }, [selectedWorkshop, search.slots]);
+  const allowedRoles: RoleName[] | null = activeSlots
+    ? Array.from(new Set(activeSlots.flatMap((s) => s.acceptedRoles)))
+    : null;
   const effectiveRoleFilter: RoleName | "all" = allowedRoles ? "all" : role;
 
   const [picked, setPicked] = useState<{ dayISO: string; hour: number } | null>(null);
