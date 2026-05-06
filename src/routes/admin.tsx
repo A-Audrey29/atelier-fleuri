@@ -14,7 +14,7 @@ function AdminLayout() {
   const blocked = tickets.filter((t) => t.status === "refused" || t.status === "blocked").length;
 
   const items: NavItem[] = [
-    { to: "/admin", label: "Triage", icon: <Icon path="M3 12l4-9 5 18 4-13 5 4" />, badge: blocked, exact: true },
+    { to: "/admin", label: "Dashboard", icon: <Icon path="M3 12l4-9 5 18 4-13 5 4" />, badge: blocked, exact: true },
     { to: "/admin/projects", label: "Projets", icon: <Icon path="M3 7h18v12H3zM3 7l3-3h12l3 3" /> },
     { to: "/admin/workshops", label: "Ateliers", icon: <Icon path="M4 5h16M4 12h16M4 19h10" /> },
     { to: "/admin/providers", label: "Prestataires", icon: <Icon path="M16 11a4 4 0 1 0-8 0M3 20a7 7 0 0 1 14 0" /> },

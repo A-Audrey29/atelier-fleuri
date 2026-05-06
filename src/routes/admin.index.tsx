@@ -4,10 +4,10 @@ import { fmtSeance } from "@/lib/format";
 import { StatusChip } from "@/components/StatusChip";
 
 export const Route = createFileRoute("/admin/")({
-  component: AdminTriage,
+  component: AdminDashboard,
 });
 
-function AdminTriage() {
+function AdminDashboard() {
   const blocked = tickets.filter((t) => t.status === "refused" || t.status === "blocked");
   const pendingOver24h = tickets.filter((t) => t.status === "pending");
   const sessionsAtRisk = sessions.filter((s) => {
@@ -21,18 +21,46 @@ function AdminTriage() {
   return (
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-[1100px] mx-auto">
       <header className="mb-6">
-        <h1 className="text-[24px] font-semibold tracking-tight">Triage</h1>
-        <p className="text-[13px] text-ink-500 mt-1">Tickets bloqués, SLA dépassés et sessions à risque.</p>
+        <h1 className="text-[24px] font-semibold tracking-tight">Dashboard administrateur</h1>
+        <p className="text-[13px] text-ink-500 mt-1 max-w-[720px]">
+          Vue d'ensemble opérationnelle de la plateforme : tickets nécessitant
+          une intervention, délais de réponse dépassés et sessions à risque
+          d'annulation. Cliquez sur un ticket pour aller le débloquer.
+        </p>
       </header>
 
-      <div className="grid sm:grid-cols-3 gap-3 mb-8">
-        <Stat label="Tickets bloqués" value={blocked.length} accent="refused" />
-        <Stat label="SLA dépassés" value={pendingOver24h.length} accent="pending" />
-        <Stat label="Sessions à risque" value={sessionsAtRisk.length} accent="override" />
+      <div className="grid sm:grid-cols-3 gap-3 mb-3">
+        <Stat
+          label="Tickets bloqués"
+          value={blocked.length}
+          accent="refused"
+          help="Tickets refusés par le prestataire ou marqués bloqués par le système. Action immédiate requise."
+        />
+        <Stat
+          label="Délais dépassés"
+          value={pendingOver24h.length}
+          accent="pending"
+          help="SLA = Service Level Agreement, soit le délai de réponse attendu (24 h). Tickets en attente depuis trop longtemps : à relancer."
+        />
+        <Stat
+          label="Sessions à risque"
+          value={sessionsAtRisk.length}
+          accent="override"
+          help="Sessions ayant au moins une séance avec un ticket refusé ou vide : un rôle requis n'est pas couvert."
+        />
       </div>
 
+      <p className="text-[11px] text-ink-500 mb-6">
+        <strong>SLA</strong> (<em>Service Level Agreement</em>) = délai de
+        réponse attendu d'un prestataire après envoi d'un ticket (par défaut 24 h).
+      </p>
+
       <section className="mb-6">
-        <h2 className="text-[14px] font-semibold mb-3">Tickets bloqués</h2>
+        <h2 className="text-[14px] font-semibold mb-1">Tickets bloqués</h2>
+        <p className="text-[12px] text-ink-500 mb-3">
+          Liste des tickets nécessitant une action manuelle (refus prestataire,
+          aucune disponibilité trouvée).
+        </p>
         <ul className="space-y-2">
           {blocked.map((t) => {
             const se = getSeance(t.seanceId);
@@ -67,7 +95,7 @@ function AdminTriage() {
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value: number; accent: "refused" | "pending" | "override" }) {
+function Stat({ label, value, accent, help }: { label: string; value: number; accent: "refused" | "pending" | "override"; help: string }) {
   const map = {
     refused: "border-s-refused-border bg-s-refused-bg/40 text-s-refused-ink",
     pending: "border-s-pending-border bg-s-pending-bg/40 text-s-pending-ink",
@@ -77,6 +105,7 @@ function Stat({ label, value, accent }: { label: string; value: number; accent: 
     <div className={`rounded-lg border p-4 ${map[accent]}`}>
       <div className="text-[12px] uppercase tracking-wider opacity-80">{label}</div>
       <div className="text-[28px] font-semibold mt-1">{value}</div>
+      <div className="text-[11px] opacity-80 mt-1 leading-snug">{help}</div>
     </div>
   );
 }
