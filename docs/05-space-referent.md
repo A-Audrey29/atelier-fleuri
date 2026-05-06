@@ -93,23 +93,34 @@ Pour chaque ticket :
    (lecture seule, **imposé** par `currentUser.centerId`, jamais demandé).
 2. **Carte unique** :
    - Liste des ateliers (sélection radio en cartes). Sélection → autoremplit
-     `workshopName`, durée, etc.
+     `workshopName`, durée, etc. Chaque carte affiche les `label` des slots
+     requis (et non plus les rôles bruts).
    - Si atelier sélectionné, apparaît :
+     - **Bloc "Rôles nécessaires pour cette séance"** : un item par
+       `RoleSlot` de l'atelier, pré-coché. Chaque item affiche :
+       - le `label` du slot ("Animateur requis — 1 personne"),
+       - en dessous, les `acceptedRoles` réels (avec `RoleDot` + nom) ;
+         si plusieurs, la mention "l'un OU l'autre :" précède la liste.
+       Le référent peut décocher un slot non requis pour cette séance
+       précise. Les slots décochés seront tracés comme tickets
+       `skipped` (visibles mais inactifs) dans la séance ; ils n'apparaissent
+       pas dans le filtre du calendrier suivant.
      - Grille 3 colonnes : `Nom de l'atelier`, `Numéro de la session`,
        `Numéro de la séance`.
      - Bandeau "Nom précis de l'atelier" (lecture seule, format
        `${workshopName} — Session ${n} · Séance ${n}`).
      - Champ "Notes pour le prestataire (optionnel)" — textarea.
-     - Encadré info : "Étape suivante : choisir un créneau parmi les
-       disponibilités des prestataires sur le calendrier."
+     - Encadré info indiquant le nombre de slots actifs / total.
    - Footer : Annuler (gauche) + "Voir les disponibilités →" (droite,
-     primaire, disabled tant qu'aucun atelier sélectionné).
+     primaire, disabled tant qu'aucun atelier sélectionné OU aucun slot coché).
 
 ### Boutons / actions
 
 - **Annuler** → `/app`.
-- **Voir les disponibilités →** → `/app/availability?workshopId=<id>`.
-  L'écran cible verrouille le filtre rôle sur les `requiredRoles` de l'atelier.
+- **Voir les disponibilités →** →
+  `/app/availability?workshopId=<id>&slots=<idx,idx,...>`.
+  L'écran cible verrouille le filtre rôle sur l'**union des `acceptedRoles`**
+  des slots actifs uniquement.
 
 ### Règles métier
 
@@ -118,9 +129,11 @@ Pour chaque ticket :
   pour affichage. Persister séparément : `workshopId`, `sessionNumber`,
   `seanceNumber`.
 - Le numéro de séance est borné par `workshop.seancesCount` (input `max`).
+- Pour chaque slot **coché** → 1 ticket `empty` créé sur la séance.
+  Pour chaque slot **décoché** → 1 ticket `skipped` créé (trace conservée,
+  réactivable plus tard).
 - Date / heure / durée : actuellement non demandés sur cet écran (la date
-  est choisie à l'étape suivante via le calendrier des dispos). Évolution :
-  permettre une saisie directe.
+  est choisie à l'étape suivante via le calendrier des dispos).
 
 ### Évolutions
 
