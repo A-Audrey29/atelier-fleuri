@@ -2,13 +2,19 @@ import type {
   Workshop, Center, Provider, Session, Seance, Ticket, Availability, RoleName,
 } from "./types";
 
+// Helper interne : un rôle simple = un slot avec un seul rôle accepté.
+const slot = (label: RoleName) => ({ label, acceptedRoles: [label] });
+
 export const workshops: Workshop[] = [
-  { id: "w1", name: "Gestion des émotions", requiredRoles: ["Psychologue", "Éducateur", "Coach sportif"], seancesCount: 4, durationMin: 120 },
-  { id: "w2", name: "Communication parents-enfants", requiredRoles: ["Animateur"], seancesCount: 2, durationMin: 120 },
-  { id: "w3", name: "Soutien émotionnel scolaire", requiredRoles: ["Animateur", "Psychologue"], seancesCount: 3, durationMin: 90 },
-  { id: "w4", name: "Pratique d'activité physique", requiredRoles: ["Éducateur sportif pleine nature"], seancesCount: 6, durationMin: 90 },
-  { id: "w5", name: "Découverte Sport/Étude", requiredRoles: ["Animateur", "Éducateur sportif"], seancesCount: 2, durationMin: 90 },
-  { id: "w6", name: "Parole des aînés", requiredRoles: ["Animateur", "Éducateur"], seancesCount: 4, durationMin: 90 },
+  { id: "w1", name: "Gestion des émotions", requiredRoles: [slot("Psychologue"), slot("Éducateur"), slot("Coach sportif")], seancesCount: 4, durationMin: 120 },
+  { id: "w2", name: "Communication parents-enfants", requiredRoles: [slot("Animateur")], seancesCount: 2, durationMin: 120 },
+  { id: "w3", name: "Soutien émotionnel scolaire", requiredRoles: [slot("Animateur"), slot("Psychologue")], seancesCount: 3, durationMin: 90 },
+  // Exemple de slot "OU" : un animateur, peu importe lequel parmi 2 spécialités.
+  { id: "w4", name: "Pratique d'activité physique", requiredRoles: [
+    { label: "Animateur sportif", acceptedRoles: ["Éducateur sportif pleine nature", "Coach sportif"] },
+  ], seancesCount: 6, durationMin: 90 },
+  { id: "w5", name: "Découverte Sport/Étude", requiredRoles: [slot("Animateur"), slot("Éducateur sportif")], seancesCount: 2, durationMin: 90 },
+  { id: "w6", name: "Parole des aînés", requiredRoles: [slot("Animateur"), slot("Éducateur")], seancesCount: 4, durationMin: 90 },
 ];
 
 export const centers: Center[] = [

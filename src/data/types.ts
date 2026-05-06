@@ -35,11 +35,23 @@ export interface Project {
   createdAt: string;
 }
 
+/**
+ * Un slot de rôle requis sur un atelier.
+ * `label` = libellé fonctionnel affiché au référent (ex. "Animateur").
+ * `acceptedRoles` = rôles réels qui peuvent satisfaire ce slot
+ *   (ex. ["Animateur extérieur", "Animateur jardin"]).
+ *   Le calendrier et les disponibilités restent filtrés par `acceptedRoles`.
+ */
+export interface RoleSlot {
+  label: string;
+  acceptedRoles: RoleName[];
+}
+
 export interface Workshop {
   id: string;
   name: string;
   description?: string;
-  requiredRoles: RoleName[];
+  requiredRoles: RoleSlot[];
   seancesCount?: number;
   durationMin?: number;
 }
