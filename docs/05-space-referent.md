@@ -148,7 +148,7 @@ Pour chaque ticket :
 ![Disponibilités prestataires — vue semaine avec pastilles de rôles](./screenshots/referent-availability.png)
 
 
-- **Route** : `/app/availability?workshopId=<id?>`
+- **Route** : `/app/availability?workshopId=<id?>&slots=<idx,idx,...>`
 - **Fichier** : `src/routes/app.availability.tsx`
 - **Accès** : référent.
 - **Données lues** : `providers`, `availabilities`, `workshopsStore`,
@@ -156,7 +156,10 @@ Pour chaque ticket :
 - **Données écrites** (cible) : créer un `Ticket` `pending` à la sélection
   d'un prestataire.
 - **Layout** : `max-w-[1300px]`.
-- **Search params** : `workshopId` (string optional, validé par `validateSearch`).
+- **Search params** :
+  - `workshopId` (string optional) — atelier qui verrouille le filtre.
+  - `slots` (string optional) — indices des slots actifs séparés par `,`
+    (ex. `"0,2"`). Si absent, tous les slots de l'atelier sont actifs.
 
 ### Sections (haut → bas)
 
@@ -167,7 +170,8 @@ Pour chaque ticket :
    - Select "Tous les ateliers" / liste des ateliers (verrouille les rôles
      si sélectionné).
    - Select "Tous les rôles" / `RoleName[]` (disabled si atelier sélectionné).
-   - Badge accent "Filtré sur : <rôles requis>" si atelier sélectionné.
+   - Badge accent "Filtré sur : <labels des slots actifs>" si atelier
+     sélectionné (affiche les `label`, pas les `acceptedRoles`).
    - Bouton "Légende des rôles" (toggle).
    - Compteur "<n> prestataires" à droite.
 3. **Légende** (si dépliée) : pastille + nom de chaque rôle visible.
@@ -184,17 +188,26 @@ Pour chaque ticket :
 5. **`BookingDrawer`** (déclenché par clic sur cellule) :
    - Position : sticky bottom-right (mobile : full width).
    - Header : `<jour court · Hh00>` + compteur.
-   - Body : prestataires **groupés par rôle** ; chaque groupe préfixé par
-     `RoleDot` + nom du rôle dans la couleur du rôle.
+   - Body : prestataires **groupés par rôle réel** (`RoleName`) ; chaque
+     groupe préfixé par `RoleDot` + nom du rôle dans la couleur du rôle.
    - Clic sur prestataire → ferme (à câbler).
 
-### Filtre intelligent
+### Filtre intelligent (clé)
 
-- Si `selectedWorkshop` → `allowedRoles = workshop.requiredRoles`.
+- Si `selectedWorkshop` :
+  - `activeSlots` = slots du workshop dont l'index est dans `slots` (ou
+    tous si `slots` absent).
+  - `allowedRoles` = **union des `acceptedRoles`** de tous les `activeSlots`.
   - `visibleProviders` = prestataires ayant **au moins un rôle** dans
     `allowedRoles`.
-  - Les rôles hors `allowedRoles` sont **masqués** des pastilles.
-- Sinon, le filtre rôle libre s'applique.
+  - Les rôles hors `allowedRoles` sont **masqués** des pastilles et des
+    groupes du `BookingDrawer`.
+- Sinon, le filtre rôle libre (select) s'applique.
+
+> Conséquence métier : pour un atelier avec un slot "Animateur"
+> acceptant `["Animateur extérieur", "Animateur jardin"]`, le calendrier
+> affiche les disponibilités des deux rôles indistinctement, et le choix
+> final dépend du créneau retenu.
 
 ### Évolutions
 
