@@ -11,6 +11,7 @@ const labels: Record<TicketStatus, string> = {
   blocked: "Bloqué",
   done: "Réalisée",
   override: "Débloqué",
+  skipped: "Non requis",
 };
 
 const styles: Record<TicketStatus, string> = {
@@ -23,6 +24,7 @@ const styles: Record<TicketStatus, string> = {
   blocked: "bg-s-refused-bg border-s-refused-border text-s-refused-ink",
   done: "bg-s-confirmed-bg border-s-confirmed-border text-s-confirmed-ink",
   override: "bg-s-override-bg border-s-override-border text-s-override-ink",
+  skipped: "bg-ink-50 border-ink-200 text-ink-400 italic",
 };
 
 const dotColor: Record<TicketStatus, string> = {
@@ -35,6 +37,7 @@ const dotColor: Record<TicketStatus, string> = {
   blocked: "bg-s-refused-ink",
   done: "bg-s-confirmed-ink",
   override: "bg-s-override-ink",
+  skipped: "bg-ink-300",
 };
 
 export function StatusChip({
