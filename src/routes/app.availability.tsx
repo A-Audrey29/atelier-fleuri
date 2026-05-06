@@ -147,9 +147,9 @@ function AvailabilityPage() {
           className="h-9 rounded-md border border-ink-200 bg-card px-3 text-[13px] disabled:opacity-50 disabled:cursor-not-allowed">
           {ALL_ROLES.map((r) => <option key={r} value={r}>{r === "all" ? "Tous les rôles" : r}</option>)}
         </select>
-        {selectedWorkshop && (
+        {selectedWorkshop && activeSlots && (
           <span className="text-[11px] text-accent-ink bg-accent-soft border border-accent/30 rounded-full px-2.5 py-1">
-            Filtré sur : {selectedWorkshop.requiredRoles.join(" · ")}
+            Filtré sur : {activeSlots.map((s) => s.label).join(" · ")}
           </span>
         )}
         <button
