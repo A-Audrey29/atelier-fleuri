@@ -44,7 +44,7 @@ function AvailabilityPage() {
   const activeSlots = useMemo(() => {
     if (!selectedWorkshop) return null;
     if (!search.slots) return selectedWorkshop.requiredRoles;
-    const idxs = new Set(search.slots.split(",").map((x) => +x));
+    const idxs = new Set(search.slots.split(",").map((x: string) => +x));
     return selectedWorkshop.requiredRoles.filter((_, i) => idxs.has(i));
   }, [selectedWorkshop, search.slots]);
   const allowedRoles: RoleName[] | null = activeSlots
