@@ -20,7 +20,8 @@ export type TicketStatus =
   | "partial"
   | "blocked"
   | "done"
-  | "override";
+  | "override"
+  | "skipped";    // slot décoché à la création — trace conservée, inactif
 
 export interface Project {
   id: string;

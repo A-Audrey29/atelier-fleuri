@@ -34,7 +34,8 @@ type TicketStatus =
   | "partial"    // (statut séance dérivé) certains rôles confirmés, d'autres non
   | "blocked"    // (statut séance dérivé) au moins un refused + un empty
   | "done"       // séance passée et tickets confirmés au moment de la séance
-  | "override";  // confirmation forcée par l'admin
+  | "override"   // confirmation forcée par l'admin
+  | "skipped";   // slot décoché par le référent à la création — inactif mais tracé
 ```
 
 ### `CommentAuthorRole`
