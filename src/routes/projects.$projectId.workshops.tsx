@@ -23,8 +23,10 @@ function ProjectWorkshops() {
             <div className="text-[14px] font-semibold">{w!.name}</div>
             <div className="text-[12px] text-ink-500 mt-0.5">{w!.seancesCount ?? 0} séances · {w!.durationMin ?? 0} min</div>
             <div className="mt-2 flex flex-wrap gap-1">
-              {w!.requiredRoles.map((r) => (
-                <span key={r} className="text-[11px] px-2 py-0.5 rounded-full bg-ink-50 text-ink-700">{r}</span>
+              {w!.requiredRoles.map((slot, i) => (
+                <span key={`${slot.label}-${i}`} className="text-[11px] px-2 py-0.5 rounded-full bg-ink-50 text-ink-700">
+                  {slot.label}{slot.acceptedRoles.length > 1 ? ` (${slot.acceptedRoles.length} alt.)` : ""}
+                </span>
               ))}
             </div>
           </li>
