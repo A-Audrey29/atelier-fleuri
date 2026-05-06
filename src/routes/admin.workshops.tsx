@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore, workshopsStore, roleColorsStore, DEFAULT_ROLE_COLORS } from "@/data/store";
-import type { RoleName } from "@/data/types";
+import type { RoleName, RoleSlot } from "@/data/types";
 import { SideDrawer } from "@/components/SideDrawer";
 import { ALL_ROLES_LIST, RoleDot } from "@/lib/roleColors";
 
@@ -9,11 +9,7 @@ export const Route = createFileRoute("/admin/workshops")({
   component: WorkshopsPage,
 });
 
-const ALL_ROLES: RoleName[] = [
-  "Psychologue", "Éducateur", "Coach sportif", "Animateur",
-  "Éducateur sportif", "Éducateur sportif pleine nature",
-  "Artiste", "Enseignant", "Intervenant numérique",
-];
+const ALL_ROLES: RoleName[] = [...ALL_ROLES_LIST];
 
 function WorkshopsPage() {
   const workshops = useStore(workshopsStore);
@@ -21,25 +17,45 @@ function WorkshopsPage() {
   const [name, setName] = useState("");
   const [seancesCount, setSeancesCount] = useState<number>(4);
   const [durationMin, setDurationMin] = useState<number>(90);
-  const [roles, setRoles] = useState<RoleName[]>([]);
+  const [slots, setSlots] = useState<RoleSlot[]>([]);
 
   function reset() {
-    setName(""); setSeancesCount(4); setDurationMin(90); setRoles([]);
+    setName(""); setSeancesCount(4); setDurationMin(90); setSlots([]);
+  }
+
+  function addSlot() {
+    setSlots((s) => [...s, { label: "", acceptedRoles: [] }]);
+  }
+  function updateSlot(i: number, patch: Partial<RoleSlot>) {
+    setSlots((s) => s.map((x, k) => (k === i ? { ...x, ...patch } : x)));
+  }
+  function removeSlot(i: number) {
+    setSlots((s) => s.filter((_, k) => k !== i));
+  }
+  function toggleAccepted(i: number, r: RoleName) {
+    setSlots((s) => s.map((x, k) => {
+      if (k !== i) return x;
+      const has = x.acceptedRoles.includes(r);
+      const acceptedRoles = has ? x.acceptedRoles.filter((y) => y !== r) : [...x.acceptedRoles, r];
+      // Auto-label si vide : premier rôle accepté
+      const label = x.label || acceptedRoles[0] || "";
+      return { ...x, acceptedRoles, label };
+    }));
   }
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!name) return;
+    const cleaned = slots.filter((s) => s.acceptedRoles.length > 0).map((s) => ({
+      label: s.label || s.acceptedRoles[0],
+      acceptedRoles: s.acceptedRoles,
+    }));
     workshopsStore.update((arr) => [
       ...arr,
-      { id: `w${arr.length + 1}_${Date.now()}`, name, seancesCount, durationMin, requiredRoles: roles },
+      { id: `w${arr.length + 1}_${Date.now()}`, name, seancesCount, durationMin, requiredRoles: cleaned },
     ]);
     setOpen(false);
     reset();
-  }
-
-  function toggleRole(r: RoleName) {
-    setRoles((rs) => rs.includes(r) ? rs.filter((x) => x !== r) : [...rs, r]);
   }
 
   return (
@@ -61,11 +77,22 @@ function WorkshopsPage() {
             <div className="text-[12px] text-ink-500 mt-1">
               {w.seancesCount ?? "—"} séance{(w.seancesCount ?? 0) > 1 ? "s" : ""} · {w.durationMin ?? "—"} min
             </div>
-            <div className="text-[12px] text-ink-500 mt-2 flex flex-wrap gap-1">
-              {w.requiredRoles.map((r) => (
-                <span key={r} className="bg-ink-50 border border-ink-150 rounded-full px-2 py-0.5">{r}</span>
-              ))}
-            </div>
+            <ul className="text-[12px] text-ink-500 mt-2 flex flex-col gap-1">
+              {w.requiredRoles.map((slot, i) => {
+                const isAlt = slot.acceptedRoles.length > 1;
+                return (
+                  <li key={`${slot.label}-${i}`} className="flex flex-wrap items-center gap-1">
+                    <span className="bg-ink-50 border border-ink-150 rounded-full px-2 py-0.5 font-medium text-ink-900">{slot.label}</span>
+                    {isAlt && <span className="text-ink-400">— ou —</span>}
+                    {isAlt && slot.acceptedRoles.map((r) => (
+                      <span key={r} className="inline-flex items-center gap-1 bg-card border border-ink-200 rounded-full px-2 py-0.5">
+                        <RoleDot role={r} size={7} />{r}
+                      </span>
+                    ))}
+                  </li>
+                );
+              })}
+            </ul>
           </li>
         ))}
       </ul>
@@ -102,17 +129,43 @@ function WorkshopsPage() {
             </Field>
           </div>
           <div>
-            <span className="block text-[11px] uppercase tracking-wider text-ink-400 mb-2">Rôles requis</span>
-            <div className="flex flex-wrap gap-1.5">
-              {ALL_ROLES.map((r) => {
-                const active = roles.includes(r);
-                return (
-                  <button type="button" key={r} onClick={() => toggleRole(r)}
-                    className={`text-[12px] rounded-full px-2.5 py-1 border ${active ? "bg-ink-900 text-paper border-ink-900" : "bg-card text-ink-700 border-ink-200 hover:border-ink-400"}`}>
-                    {r}
-                  </button>
-                );
-              })}
+            <div className="flex items-center justify-between mb-2">
+              <span className="block text-[11px] uppercase tracking-wider text-ink-400">Rôles requis (slots)</span>
+              <button type="button" onClick={addSlot} className="text-[12px] text-accent-ink hover:underline">+ Ajouter un slot</button>
+            </div>
+            <p className="text-[11px] text-ink-500 mb-2">
+              Un slot représente <strong>un besoin</strong> (1 personne).
+              Cocher plusieurs rôles = "<em>l'un OU l'autre</em>" — le système prendra
+              le premier disponible.
+            </p>
+            <div className="space-y-2">
+              {slots.map((s, i) => (
+                <div key={i} className="rounded-md border border-ink-200 p-2 bg-ink-50/40">
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      value={s.label}
+                      onChange={(e) => updateSlot(i, { label: e.target.value })}
+                      placeholder="Libellé (ex. Animateur)"
+                      className="input flex-1"
+                    />
+                    <button type="button" onClick={() => removeSlot(i)} className="h-8 w-8 grid place-items-center text-ink-400 hover:text-s-refused-ink">✕</button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ALL_ROLES.map((r) => {
+                      const active = s.acceptedRoles.includes(r);
+                      return (
+                        <button type="button" key={r} onClick={() => toggleAccepted(i, r)}
+                          className={`text-[11px] rounded-full px-2 py-0.5 border inline-flex items-center gap-1 ${active ? "bg-ink-900 text-paper border-ink-900" : "bg-card text-ink-700 border-ink-200 hover:border-ink-400"}`}>
+                          <RoleDot role={r} size={7} />{r}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+              {slots.length === 0 && (
+                <p className="text-[12px] text-ink-400 italic">Aucun slot. Cliquez "+ Ajouter un slot".</p>
+              )}
             </div>
           </div>
         </form>

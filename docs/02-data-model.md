@@ -34,7 +34,8 @@ type TicketStatus =
   | "partial"    // (statut séance dérivé) certains rôles confirmés, d'autres non
   | "blocked"    // (statut séance dérivé) au moins un refused + un empty
   | "done"       // séance passée et tickets confirmés au moment de la séance
-  | "override";  // confirmation forcée par l'admin
+  | "override"   // confirmation forcée par l'admin
+  | "skipped";   // slot décoché par le référent à la création — inactif mais tracé
 ```
 
 ### `CommentAuthorRole`
@@ -45,6 +46,21 @@ type CommentAuthorRole = "referent" | "provider" | "admin";
 
 ## Entités
 
+### `RoleSlot`
+
+```ts
+/**
+ * Un slot représente UN besoin (1 personne) sur un atelier.
+ * `acceptedRoles` permet d'exprimer un "OU" : n'importe lequel de ces rôles
+ * peut couvrir le slot. Le calendrier et les disponibilités restent filtrés
+ * sur les `acceptedRoles` réels (et non sur le `label` affiché au référent).
+ */
+interface RoleSlot {
+  label: string;              // libellé fonctionnel (ex. "Animateur")
+  acceptedRoles: RoleName[];  // rôles réels acceptés (ex. ["Animateur extérieur","Animateur jardin"])
+}
+```
+
 ### `Workshop`
 
 ```ts
@@ -52,10 +68,26 @@ interface Workshop {
   id: string;
   name: string;
   description?: string;
-  requiredRoles: RoleName[]; // ex. ["Psychologue", "Éducateur"]
+  requiredRoles: RoleSlot[]; // un slot = un besoin (1 personne)
   seancesCount?: number;     // nb de séances par session, ex. 4
   durationMin?: number;      // durée d'une séance en minutes, ex. 120
 }
+```
+
+**Exemple d'atelier avec slot "OU" :**
+
+```ts
+{
+  id: "w4", name: "Pratique d'activité physique",
+  requiredRoles: [
+    { label: "Animateur sportif",
+      acceptedRoles: ["Éducateur sportif pleine nature", "Coach sportif"] },
+  ],
+  seancesCount: 6, durationMin: 90,
+}
+// → le référent voit "Animateur sportif requis — 1 personne" ;
+// le calendrier propose les prestataires de l'un OU l'autre rôle ;
+// le choix final dépendra des disponibilités.
 ```
 
 ### `Center`

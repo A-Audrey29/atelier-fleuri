@@ -10,6 +10,8 @@ import { ROLE_COLORS, ALL_ROLES_LIST, RoleDot } from "@/lib/roleColors";
 export const Route = createFileRoute("/app/availability")({
   validateSearch: (s: Record<string, unknown>) => ({
     workshopId: typeof s.workshopId === "string" ? s.workshopId : "",
+    // Indices des slots actifs (séparés par ","), ex. "0,2"
+    slots: typeof s.slots === "string" ? s.slots : "",
   }),
   component: AvailabilityPage,
 });
@@ -38,7 +40,16 @@ function AvailabilityPage() {
   const selectedWorkshop = workshops.find((w) => w.id === workshopId) ?? null;
 
   const [role, setRole] = useState<RoleName | "all">("all");
-  const allowedRoles: RoleName[] | null = selectedWorkshop ? selectedWorkshop.requiredRoles : null;
+  // Slots actifs (sous-ensemble des requiredRoles de l'atelier)
+  const activeSlots = useMemo(() => {
+    if (!selectedWorkshop) return null;
+    if (!search.slots) return selectedWorkshop.requiredRoles;
+    const idxs = new Set(search.slots.split(",").map((x: string) => +x));
+    return selectedWorkshop.requiredRoles.filter((_, i) => idxs.has(i));
+  }, [selectedWorkshop, search.slots]);
+  const allowedRoles: RoleName[] | null = activeSlots
+    ? Array.from(new Set(activeSlots.flatMap((s) => s.acceptedRoles)))
+    : null;
   const effectiveRoleFilter: RoleName | "all" = allowedRoles ? "all" : role;
 
   const [picked, setPicked] = useState<{ dayISO: string; hour: number } | null>(null);
@@ -136,9 +147,9 @@ function AvailabilityPage() {
           className="h-9 rounded-md border border-ink-200 bg-card px-3 text-[13px] disabled:opacity-50 disabled:cursor-not-allowed">
           {ALL_ROLES.map((r) => <option key={r} value={r}>{r === "all" ? "Tous les rôles" : r}</option>)}
         </select>
-        {selectedWorkshop && (
+        {selectedWorkshop && activeSlots && (
           <span className="text-[11px] text-accent-ink bg-accent-soft border border-accent/30 rounded-full px-2.5 py-1">
-            Filtré sur : {selectedWorkshop.requiredRoles.join(" · ")}
+            Filtré sur : {activeSlots.map((s) => s.label).join(" · ")}
           </span>
         )}
         <button

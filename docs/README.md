@@ -57,7 +57,7 @@ référencées dans les fiches d'écran (espaces référent / prestataire / admi
 | Référent | Nouvelle séance | [`screenshots/referent-new-session.png`](./screenshots/referent-new-session.png) |
 | Prestataire | Demandes (accueil) | [`screenshots/provider-requests.png`](./screenshots/provider-requests.png) |
 | Prestataire | Mes disponibilités | [`screenshots/provider-dispos.png`](./screenshots/provider-dispos.png) |
-| Admin | Triage | [`screenshots/admin-triage.png`](./screenshots/admin-triage.png) |
+| Admin | Dashboard | [`screenshots/admin-triage.png`](./screenshots/admin-triage.png) |
 | Admin | Ateliers + couleurs des rôles | [`screenshots/admin-workshops.png`](./screenshots/admin-workshops.png) |
 | Admin | Utilisateurs | [`screenshots/admin-users.png`](./screenshots/admin-users.png) |
 

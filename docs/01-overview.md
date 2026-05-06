@@ -24,7 +24,7 @@ du compte connecté détermine l'espace par défaut.
 | --- | --- | --- | --- |
 | Référent famille | `/app/*` | "Référent" | Mes tickets, Disponibilités, Mes séances, Prestataires, Nouvelle séance |
 | Prestataire | `/pro/*` | "Prestataire" | Demandes, Mes dispos, Missions, Profil |
-| Admin Asanblé | `/admin/*` | "Admin" | Triage, Projets, Ateliers, Prestataires, Centres, Utilisateurs, Export |
+| Admin Asanblé | `/admin/*` | "Admin" | Dashboard, Projets, Ateliers, Prestataires, Centres, Utilisateurs, Export |
 
 Chaque espace utilise le composant partagé [`AppShell`](./04-shared-components.md#appshell).
 
@@ -94,7 +94,7 @@ Clic sur un créneau → drawer "BookingDrawer"
 ### 3. Supervision admin
 
 ```text
-[Admin] /admin (Triage)
+[Admin] /admin (Dashboard)
     │
     ├── Tickets bloqués (refused/blocked) → "Débloquer ›" → écran séance référent
     ├── SLA dépassés (pending > 24h)

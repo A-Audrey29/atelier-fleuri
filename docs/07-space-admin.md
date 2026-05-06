@@ -7,7 +7,7 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 | Label | Route | Badge dynamique |
 | --- | --- | --- |
-| Triage | `/admin` (exact) | Nb tickets `refused | blocked` |
+| Dashboard | `/admin` (exact) | Nb tickets `refused | blocked` |
 | Projets | `/admin/projects` | — |
 | Ateliers | `/admin/workshops` | — |
 | Prestataires | `/admin/providers` | — |
@@ -17,22 +17,33 @@ applique `setCurrentUserByRole("admin")` au mount.
 
 ---
 
-## Écran : Triage (Tableau de bord)
+## Écran : Dashboard administrateur
 
-![Triage admin — KPI et tickets bloqués](./screenshots/admin-triage.png)
+![Dashboard admin — KPI et tickets bloqués](./screenshots/admin-triage.png)
 
 
 - **Route** : `/admin` (exact)
 - **Fichier** : `src/routes/admin.index.tsx`
 
+C'est la page d'atterrissage de l'admin : un **tableau de bord
+opérationnel** qui résume tout ce qui demande une intervention humaine sur la
+plateforme. L'admin doit pouvoir, en un coup d'œil, voir s'il y a une crise
+en cours (tickets bloqués), des prestataires lents (SLA dépassés) ou des
+sessions qui risquent de ne pas avoir tous les rôles couverts à la date prévue.
+
 ### Sections
 
-1. **Header** : "Triage" + sous-titre.
-2. **3 stats KPI** (cartes colorées) :
-   - Tickets bloqués (rouge `s-refused-*`).
-   - SLA dépassés (jaune `s-pending-*`).
-   - Sessions à risque (violet `s-override-*`).
-3. **Tickets bloqués** : liste de cartes avec workshop + ville, séance + date
+1. **Header** : "Dashboard administrateur" + sous-titre explicatif.
+2. **3 stats KPI** (cartes colorées) avec un texte d'aide sous chaque chiffre :
+   - **Tickets bloqués** (rouge) : tickets refusés par le prestataire ou
+     marqués bloqués par le système. Action immédiate requise.
+   - **Délais dépassés** (jaune) : tickets `pending` depuis plus que la durée
+     SLA (24 h par défaut). À relancer.
+   - **Sessions à risque** (violet) : sessions ayant au moins une séance avec
+     un ticket refusé ou vide.
+3. **Légende SLA** : rappel inline que <em>SLA = Service Level Agreement</em>
+   = délai de réponse attendu d'un prestataire (24 h par défaut).
+4. **Liste "Tickets bloqués"** : cartes avec workshop + ville, séance + date
    + rôle (+ "refusé par <nom>" si applicable), `StatusChip`, lien
    "Débloquer ›" → `/app/sessions/$sessionId/seances/$n` (vue référent).
 
@@ -113,8 +124,10 @@ fermeture → reset complet du formulaire.
 
 1. **Header** : titre + compteur, CTA primaire **+ Nouvel atelier** (ouvre
    `SideDrawer`).
-2. **Grille 2 colonnes** de cartes ateliers (nom, "<n> séances · <durée>
-   min", liste des rôles requis en pills).
+2. **Grille 2 colonnes** de cartes ateliers : nom, "<n> séances · <durée>
+   min", puis la liste des **slots de rôles requis**. Chaque slot affiche son
+   `label` ; si le slot accepte plusieurs rôles, ils sont listés derrière un
+   séparateur "— ou —".
 3. **Panneau "Couleurs des rôles"** :
    - Header : titre + "Réinitialiser" (rétablit `DEFAULT_ROLE_COLORS`).
    - Liste à 2 colonnes ; chaque ligne :
@@ -130,12 +143,22 @@ Champs (formulaire) :
 - Nom de l'atelier (required).
 - Grille 2 colonnes : Nombre de séances (number 1..50, défaut 4),
   Durée en min (number step 15, défaut 90).
-- Rôles requis : multi-toggle (pills cliquables) parmi les 9 rôles.
+- **Rôles requis (slots)** : liste éditable de `RoleSlot[]`. Bouton
+  "+ Ajouter un slot" pour en créer un. Chaque slot a :
+  - un champ texte **Libellé** (ex. "Animateur sportif") — auto-rempli avec
+    le premier rôle coché si laissé vide,
+  - une grille de pills cliquables des 9 `RoleName` réels : cocher
+    plusieurs rôles signifie "**l'un OU l'autre**" (le calendrier proposera
+    les prestataires de l'un quelconque de ces rôles).
 
-Footer : "Créer l'atelier" (disabled si nom vide) / "Annuler".
+Footer : "Créer l'atelier" (disabled si nom vide) / "Annuler". Les slots
+sans aucun rôle accepté sont ignorés à la création.
 
-### Règles
+### Règles métier
 
+- Un slot = **1 personne**. Pour avoir besoin de 2 animateurs, créer 2 slots.
+- Le `label` est ce que voit le référent ; les `acceptedRoles` sont ce qui
+  filtre réellement le calendrier et les disponibilités.
 - À la création : push dans `workshopsStore`. Pas de validation des doublons
   (à ajouter).
 
@@ -143,7 +166,8 @@ Footer : "Créer l'atelier" (disabled si nom vide) / "Annuler".
 
 - Édition / archivage d'un atelier existant.
 - Lier l'atelier à un projet (financeur).
-- Validation : `requiredRoles.length >= 1`.
+- Validation : au moins 1 slot avec au moins 1 `acceptedRoles`.
+- Quotas par slot (ex. 2 personnes du même slot).
 
 ---
 
