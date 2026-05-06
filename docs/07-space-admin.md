@@ -124,8 +124,10 @@ fermeture → reset complet du formulaire.
 
 1. **Header** : titre + compteur, CTA primaire **+ Nouvel atelier** (ouvre
    `SideDrawer`).
-2. **Grille 2 colonnes** de cartes ateliers (nom, "<n> séances · <durée>
-   min", liste des rôles requis en pills).
+2. **Grille 2 colonnes** de cartes ateliers : nom, "<n> séances · <durée>
+   min", puis la liste des **slots de rôles requis**. Chaque slot affiche son
+   `label` ; si le slot accepte plusieurs rôles, ils sont listés derrière un
+   séparateur "— ou —".
 3. **Panneau "Couleurs des rôles"** :
    - Header : titre + "Réinitialiser" (rétablit `DEFAULT_ROLE_COLORS`).
    - Liste à 2 colonnes ; chaque ligne :
@@ -141,12 +143,22 @@ Champs (formulaire) :
 - Nom de l'atelier (required).
 - Grille 2 colonnes : Nombre de séances (number 1..50, défaut 4),
   Durée en min (number step 15, défaut 90).
-- Rôles requis : multi-toggle (pills cliquables) parmi les 9 rôles.
+- **Rôles requis (slots)** : liste éditable de `RoleSlot[]`. Bouton
+  "+ Ajouter un slot" pour en créer un. Chaque slot a :
+  - un champ texte **Libellé** (ex. "Animateur sportif") — auto-rempli avec
+    le premier rôle coché si laissé vide,
+  - une grille de pills cliquables des 9 `RoleName` réels : cocher
+    plusieurs rôles signifie "**l'un OU l'autre**" (le calendrier proposera
+    les prestataires de l'un quelconque de ces rôles).
 
-Footer : "Créer l'atelier" (disabled si nom vide) / "Annuler".
+Footer : "Créer l'atelier" (disabled si nom vide) / "Annuler". Les slots
+sans aucun rôle accepté sont ignorés à la création.
 
-### Règles
+### Règles métier
 
+- Un slot = **1 personne**. Pour avoir besoin de 2 animateurs, créer 2 slots.
+- Le `label` est ce que voit le référent ; les `acceptedRoles` sont ce qui
+  filtre réellement le calendrier et les disponibilités.
 - À la création : push dans `workshopsStore`. Pas de validation des doublons
   (à ajouter).
 
@@ -154,7 +166,8 @@ Footer : "Créer l'atelier" (disabled si nom vide) / "Annuler".
 
 - Édition / archivage d'un atelier existant.
 - Lier l'atelier à un projet (financeur).
-- Validation : `requiredRoles.length >= 1`.
+- Validation : au moins 1 slot avec au moins 1 `acceptedRoles`.
+- Quotas par slot (ex. 2 personnes du même slot).
 
 ---
 
